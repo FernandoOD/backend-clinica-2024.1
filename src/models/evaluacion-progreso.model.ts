@@ -1,6 +1,19 @@
-import {Entity, model, property} from '@loopback/repository';
+import {belongsTo, Entity, model, property} from '@loopback/repository';
+import {Paciente} from './paciente.model';
+import {Terapeuta} from './terapeuta.model';
 
-@model()
+@model({
+  settings: {
+    foreignKeys: {
+      fk_paciente_id: {
+        name: 'fk_paciente_id',
+        entity: 'Paciente',
+        entityKey: 'id',
+        foreignKey: 'pacienteId',
+      },
+    },
+  },
+})
 export class EvaluacionProgreso extends Entity {
   @property({
     type: 'number',
@@ -21,6 +34,11 @@ export class EvaluacionProgreso extends Entity {
   })
   ProgresoObservado: string;
 
+  @belongsTo(() => Paciente, {name: 'progresoPaciente'})
+  pacienteId: number;
+
+  @belongsTo(() => Terapeuta, {name: 'terapeutaProgreso'})
+  terapeutaId: number;
 
   constructor(data?: Partial<EvaluacionProgreso>) {
     super(data);

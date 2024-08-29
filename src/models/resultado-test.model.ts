@@ -1,4 +1,6 @@
-import {Entity, model, property} from '@loopback/repository';
+import {Entity, model, property, belongsTo} from '@loopback/repository';
+import {Consulta} from './consulta.model';
+import {TestPsicometrico} from './test-psicometrico.model';
 
 @model()
 export class ResultadoTest extends Entity {
@@ -27,6 +29,11 @@ export class ResultadoTest extends Entity {
   })
   Interpretacion?: string;
 
+  @belongsTo(() => Consulta, {name: 'consultaTest'})
+  consultaId: number;
+
+  @belongsTo(() => TestPsicometrico)
+  testPsicometricoId: number;
 
   constructor(data?: Partial<ResultadoTest>) {
     super(data);

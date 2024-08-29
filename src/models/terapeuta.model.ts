@@ -1,4 +1,8 @@
-import {Entity, model, property} from '@loopback/repository';
+import {Entity, model, property, hasMany} from '@loopback/repository';
+import {ModuloPsicoeducativo} from './modulo-psicoeducativo.model';
+import {Consulta} from './consulta.model';
+import {Mensaje} from './mensaje.model';
+import {EvaluacionProgreso} from './evaluacion-progreso.model';
 
 @model()
 export class Terapeuta extends Entity {
@@ -49,6 +53,18 @@ export class Terapeuta extends Entity {
     default: 'CURRENT_TIMESTAMP',
   })
   FechaRegistro?: string;
+
+  @hasMany(() => ModuloPsicoeducativo)
+  modulosPsicoeducativos: ModuloPsicoeducativo[];
+
+  @hasMany(() => Consulta)
+  consultas: Consulta[];
+
+  @hasMany(() => Mensaje)
+  mensajes: Mensaje[];
+
+  @hasMany(() => EvaluacionProgreso)
+  evaluacionProgresos: EvaluacionProgreso[];
 
   constructor(data?: Partial<Terapeuta>) {
     super(data);
