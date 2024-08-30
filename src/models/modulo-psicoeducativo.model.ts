@@ -1,7 +1,19 @@
-import {Entity, model, property, belongsTo} from '@loopback/repository';
+import {belongsTo, Entity, hasMany, model, property} from '@loopback/repository';
+import {EjercicioPractico} from './ejercicio-practico.model';
 import {Terapeuta} from './terapeuta.model';
 
-@model()
+@model({
+  settings: {
+    foreignKeys: {
+      fk_terapeuta_id: {
+        name: 'fk_terapeuta_id',
+        entity: 'Terapeuta',
+        entityKey: 'id',
+        foreignKey: 'terapeutaId',
+      },
+    },
+  },
+})
 export class ModuloPsicoeducativo extends Entity {
   @property({
     type: 'number',
@@ -30,6 +42,9 @@ export class ModuloPsicoeducativo extends Entity {
 
   @belongsTo(() => Terapeuta, {name: 'terapeutaModulo'})
   terapeutaId: number;
+
+  @hasMany(() => EjercicioPractico)
+  ejercicioPracticos: EjercicioPractico[];
 
   constructor(data?: Partial<ModuloPsicoeducativo>) {
     super(data);

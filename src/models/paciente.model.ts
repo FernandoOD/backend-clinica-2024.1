@@ -1,7 +1,11 @@
-import {Entity, model, property, hasMany} from '@loopback/repository';
+import {Entity, model, property, hasMany, hasOne} from '@loopback/repository';
 import {EvaluacionProgreso} from './evaluacion-progreso.model';
 import {Mensaje} from './mensaje.model';
 import {Consulta} from './consulta.model';
+import {EjercicioPractico} from './ejercicio-practico.model';
+import {HistoriaClinica} from './historia-clinica.model';
+import {Terapeuta} from './terapeuta.model';
+import {PacienteTerapeuta} from './paciente-terapeuta.model';
 
 @model()
 export class Paciente extends Entity {
@@ -61,6 +65,15 @@ export class Paciente extends Entity {
 
   @hasMany(() => Consulta)
   consultas: Consulta[];
+
+  @hasMany(() => EjercicioPractico)
+  ejercicioPracticos: EjercicioPractico[];
+
+  @hasOne(() => HistoriaClinica)
+  historiaClinica: HistoriaClinica;
+
+  @hasMany(() => Terapeuta, {through: {model: () => PacienteTerapeuta}})
+  terapeutas: Terapeuta[];
 
   constructor(data?: Partial<Paciente>) {
     super(data);

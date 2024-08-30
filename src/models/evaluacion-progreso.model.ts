@@ -5,11 +5,17 @@ import {Terapeuta} from './terapeuta.model';
 @model({
   settings: {
     foreignKeys: {
-      fk_paciente_id: {
-        name: 'fk_paciente_id',
+      fk_paciente_id_evaluacion: {
+        name: 'fk_paciente_id_evaluacion',
         entity: 'Paciente',
         entityKey: 'id',
         foreignKey: 'pacienteId',
+      },
+      fk_terapeuta_id_evaluacion: {
+        name: 'fk_terapeuta_id_evaluacion',
+        entity: 'Terapeuta',
+        entityKey: 'id',
+        foreignKey: 'terapeutaId',
       },
     },
   },

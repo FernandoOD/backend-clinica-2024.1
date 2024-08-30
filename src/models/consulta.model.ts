@@ -1,9 +1,30 @@
-import {Entity, model, property, belongsTo, hasMany} from '@loopback/repository';
-import {Terapeuta} from './terapeuta.model';
+import {belongsTo, Entity, hasMany, hasOne, model, property} from '@loopback/repository';
+import {ConsultaTest} from './consulta-test.model';
+import {EntradaHistoria} from './entrada-historia.model';
+import {NotaClinica} from './nota-clinica.model';
 import {Paciente} from './paciente.model';
 import {ResultadoTest} from './resultado-test.model';
+import {Terapeuta} from './terapeuta.model';
+import {TestPsicometrico} from './test-psicometrico.model';
 
-@model()
+@model({
+  settings: {
+    foreignKeys: {
+      fk_paciente_id_consulta: {
+        name: 'fk_paciente_id_consulta',
+        entity: 'Paciente',
+        entityKey: 'id',
+        foreignKey: 'pacienteId',
+      },
+      fk_terapeuta_id_consulta: {
+        name: 'fk_terapeuta_id_consulta',
+        entity: 'Terapeuta',
+        entityKey: 'id',
+        foreignKey: 'terapeutaId',
+      },
+    },
+  },
+})
 export class Consulta extends Entity {
   @property({
     type: 'number',
@@ -31,6 +52,15 @@ export class Consulta extends Entity {
 
   @hasMany(() => ResultadoTest)
   resultadosTests: ResultadoTest[];
+
+  @hasMany(() => EntradaHistoria)
+  entradaHistorias: EntradaHistoria[];
+
+  @hasOne(() => NotaClinica)
+  notaClinica: NotaClinica;
+
+  @hasMany(() => TestPsicometrico, {through: {model: () => ConsultaTest}})
+  testPsicometricos: TestPsicometrico[];
 
   constructor(data?: Partial<Consulta>) {
     super(data);

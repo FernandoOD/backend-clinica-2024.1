@@ -1,6 +1,25 @@
-import {Entity, model, property} from '@loopback/repository';
+import {belongsTo, Entity, model, property} from '@loopback/repository';
+import {Consulta} from './consulta.model';
+import {HistoriaClinica} from './historia-clinica.model';
 
-@model()
+@model({
+  settings: {
+    foreignKeys: {
+      fk_historia_clinica_id_entrada: {
+        name: 'fk_historia_clinica_id_entrada',
+        entity: 'HistoriaClinica',
+        entityKey: 'id',
+        foreignKey: 'historiaClinicaId',
+      },
+      fk_consulta_id_entrada: {
+        name: 'fk_consulta_id_entrada',
+        entity: 'Consulta',
+        entityKey: 'id',
+        foreignKey: 'consultaId',
+      },
+    },
+  },
+})
 export class EntradaHistoria extends Entity {
   @property({
     type: 'number',
@@ -21,6 +40,11 @@ export class EntradaHistoria extends Entity {
   })
   Detalles: string;
 
+  @belongsTo(() => Consulta)
+  consultaId: number;
+
+  @belongsTo(() => HistoriaClinica)
+  historiaClinicaId: number;
 
   constructor(data?: Partial<EntradaHistoria>) {
     super(data);
