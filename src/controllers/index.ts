@@ -33,3 +33,6 @@ export * from './paciente-terapeuta.controller';
 export * from './consulta-test-psicometrico.controller';
 export * from './usuario-rol.controller';
 export * from './rol-usuario.controller';
+export * from './usuario.controller';
+export * from './paciente.controller';
+export * from './terapeuta.controller';
