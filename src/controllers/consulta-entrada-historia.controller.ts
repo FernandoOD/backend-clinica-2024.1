@@ -19,7 +19,7 @@ import {
   Consulta,
   EntradaHistoria,
 } from '../models';
-import {ConsultaRepository} from '../repositories';
+import { ConsultaRepository } from '../repositories';
 
 export class ConsultaEntradaHistoriaController {
   constructor(

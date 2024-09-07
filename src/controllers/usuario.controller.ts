@@ -16,14 +16,24 @@ import {
   del,
   requestBody,
   response,
+  HttpErrors,
 } from '@loopback/rest';
 import {Usuario} from '../models';
 import {UsuarioRepository} from '../repositories';
+import {GeneralFunctionsService} from '../services';
+import { service } from '@loopback/core';
+
+class Credencial{
+  nombre_usuario : string;
+  password : string;
+}
 
 export class UsuarioController {
   constructor(
     @repository(UsuarioRepository)
     public usuarioRepository : UsuarioRepository,
+    @service(GeneralFunctionsService)
+    public service : GeneralFunctionsService
   ) {}
 
   @post('/usuarios')
@@ -37,14 +47,28 @@ export class UsuarioController {
         'application/json': {
           schema: getModelSchemaRef(Usuario, {
             title: 'NewUsuario',
-            exclude: ['id'],
+            exclude: ['id','Password'],
           }),
         },
       },
     })
     usuario: Omit<Usuario, 'id'>,
   ): Promise<Usuario> {
-    return this.usuarioRepository.create(usuario);
+
+    let  pass = this.service.GenerarClaveAleatoria();
+    console.log(pass);
+
+    let cipherpass = this.service.CifrarPassword(pass);
+    console.log(cipherpass);
+    usuario.Password = cipherpass;
+    
+    let usuarioAgregado = await this.usuarioRepository.create(usuario);
+
+    /*
+     * Noytificar al usuario
+    */
+
+    return usuarioAgregado;
   }
 
   @get('/usuarios/count')
@@ -146,5 +170,23 @@ export class UsuarioController {
   })
   async deleteById(@param.path.string('id') id: string): Promise<void> {
     await this.usuarioRepository.deleteById(id);
+  }
+
+  @post('/identificar',{
+    responses: {
+      '200' : {
+        description : 'Identificación de ususarios'
+      }
+    }
+  })
+  async identificar (
+    @requestBody credenciales : Credencial
+  ) : Promise<Usuario> {
+      let usuario = this.usuarioRepository.findOne ({where:{nombre_usuario: credenciales.nombre_usuario, password : credenciales.password}});
+      if(usuario){
+        // generar token
+      }else{
+        throw new HttpErrors[401]("Usuario o clave incorrecto.")
+      }
   }
 }

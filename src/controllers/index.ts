@@ -36,3 +36,4 @@ export * from './rol-usuario.controller';
 export * from './usuario.controller';
 export * from './paciente.controller';
 export * from './terapeuta.controller';
+export * from './historia-clinica.controller';

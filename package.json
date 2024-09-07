@@ -51,6 +51,8 @@
     "@loopback/rest": "^14.0.5",
     "@loopback/rest-explorer": "^7.0.5",
     "@loopback/service-proxy": "^7.0.5",
+    "crypto-js": "^4.2.0",
+    "jsonwebtoken": "^9.0.2",
     "loopback-connector-mongodb": "^6.2.0",
     "loopback-connector-mysql": "^7.0.13",
     "tslib": "^2.0.0"

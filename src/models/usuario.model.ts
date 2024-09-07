@@ -18,9 +18,8 @@ export class Usuario extends Entity {
 
   @property({
     type: 'string',
-    required: true,
   })
-  Password: string;
+  Password?: string;
 
   @property({
     type: 'number',
