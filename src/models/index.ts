@@ -14,3 +14,4 @@ export * from './resultado-test.model';
 export * from './evaluacion-progreso.model';
 export * from './rol.model';
 export * from './usuario.model';
+export * from './credenciales.model';

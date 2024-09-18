@@ -1,3 +1,4 @@
+import {service} from '@loopback/core';
 import {
   Count,
   CountSchema,
@@ -7,34 +8,30 @@ import {
   Where,
 } from '@loopback/repository';
 import {
-  post,
-  param,
+  del,
   get,
   getModelSchemaRef,
+  HttpErrors,
+  param,
   patch,
+  post,
   put,
-  del,
   requestBody,
   response,
-  HttpErrors,
 } from '@loopback/rest';
-import {Usuario} from '../models';
+import {Credenciales, Usuario} from '../models';
 import {UsuarioRepository} from '../repositories';
-import {GeneralFunctionsService} from '../services';
-import { service } from '@loopback/core';
-
-class Credencial{
-  nombre_usuario : string;
-  password : string;
-}
+import {GeneralFunctionsService, JwtService} from '../services';
 
 export class UsuarioController {
   constructor(
     @repository(UsuarioRepository)
-    public usuarioRepository : UsuarioRepository,
+    public usuarioRepository: UsuarioRepository,
     @service(GeneralFunctionsService)
-    public service : GeneralFunctionsService
-  ) {}
+    public service: GeneralFunctionsService,
+    @service(JwtService)
+    public serviceJWT: JwtService
+  ) { }
 
   @post('/usuarios')
   @response(200, {
@@ -47,7 +44,7 @@ export class UsuarioController {
         'application/json': {
           schema: getModelSchemaRef(Usuario, {
             title: 'NewUsuario',
-            exclude: ['id','Password'],
+            exclude: ['id', 'Password'],
           }),
         },
       },
@@ -55,13 +52,13 @@ export class UsuarioController {
     usuario: Omit<Usuario, 'id'>,
   ): Promise<Usuario> {
 
-    let  pass = this.service.GenerarClaveAleatoria();
+    let pass = this.service.GenerarClaveAleatoria();
     console.log(pass);
 
     let cipherpass = this.service.CifrarPassword(pass);
     console.log(cipherpass);
     usuario.Password = cipherpass;
-    
+
     let usuarioAgregado = await this.usuarioRepository.create(usuario);
 
     /*
@@ -172,21 +169,32 @@ export class UsuarioController {
     await this.usuarioRepository.deleteById(id);
   }
 
-  @post('/identificar',{
+  @post('/identificar', {
     responses: {
-      '200' : {
-        description : 'Identificación de ususarios'
+      '200': {
+        description: 'Identificación de ususarios'
       }
     }
   })
-  async identificar (
-    @requestBody credenciales : Credencial
-  ) : Promise<Usuario> {
-      let usuario = this.usuarioRepository.findOne ({where:{nombre_usuario: credenciales.nombre_usuario, password : credenciales.password}});
-      if(usuario){
-        // generar token
-      }else{
-        throw new HttpErrors[401]("Usuario o clave incorrecto.")
-      }
+  async identificar(
+    @requestBody({
+      content: {
+        'application/json': {
+          schema: getModelSchemaRef(Credenciales),
+        },
+      },
+    }) credenciales: Credenciales
+  ): Promise<Object> {
+    let usuario = await this.usuarioRepository.findOne({where: {Email: credenciales.email, Password: credenciales.password}});
+    if (usuario) {
+      let tk = this.serviceJWT.CrearTokenJWT(usuario);
+      usuario.Password = '';
+      return {
+        user: usuario,
+        tokenk: tk
+      };
+    } else {
+      throw new HttpErrors[401]("Usuario o clave incorrecto.")
+    }
   }
 }
