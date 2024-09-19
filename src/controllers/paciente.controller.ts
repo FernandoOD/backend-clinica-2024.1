@@ -1,3 +1,4 @@
+import {authenticate} from '@loopback/authentication';
 import {
   Count,
   CountSchema,
@@ -7,24 +8,25 @@ import {
   Where,
 } from '@loopback/repository';
 import {
-  post,
-  param,
+  del,
   get,
   getModelSchemaRef,
+  param,
   patch,
+  post,
   put,
-  del,
   requestBody,
   response,
 } from '@loopback/rest';
 import {Paciente} from '../models';
 import {PacienteRepository} from '../repositories';
 
+@authenticate('admin')
 export class PacienteController {
   constructor(
     @repository(PacienteRepository)
-    public pacienteRepository : PacienteRepository,
-  ) {}
+    public pacienteRepository: PacienteRepository,
+  ) { }
 
   @post('/pacientes')
   @response(200, {
@@ -58,6 +60,7 @@ export class PacienteController {
     return this.pacienteRepository.count(where);
   }
 
+  @authenticate.skip()
   @get('/pacientes')
   @response(200, {
     description: 'Array of Paciente model instances',
@@ -95,6 +98,7 @@ export class PacienteController {
     return this.pacienteRepository.updateAll(paciente, where);
   }
 
+  @authenticate.skip()
   @get('/pacientes/{id}')
   @response(200, {
     description: 'Paciente model instance',

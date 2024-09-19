@@ -172,7 +172,7 @@ export class UsuarioController {
   @post('/identificar', {
     responses: {
       '200': {
-        description: 'Identificación de ususarios'
+        description: 'Identificación de usuarios'
       }
     }
   })

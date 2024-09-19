@@ -45,17 +45,20 @@
     "!*/__tests__"
   ],
   "dependencies": {
+    "@loopback/authentication": "^11.0.6",
     "@loopback/boot": "^7.0.5",
     "@loopback/core": "^6.1.2",
     "@loopback/repository": "^7.0.5",
     "@loopback/rest": "^14.0.5",
     "@loopback/rest-explorer": "^7.0.5",
+    "@loopback/security": "^0.11.6",
     "@loopback/service-proxy": "^7.0.5",
     "crypto-js": "^4.2.0",
     "generate-password": "^1.7.1",
     "jsonwebtoken": "^9.0.2",
     "loopback-connector-mongodb": "^6.2.0",
     "loopback-connector-mysql": "^7.0.13",
+    "parse-bearer-token": "^1.0.1",
     "tslib": "^2.0.0"
   },
   "devDependencies": {

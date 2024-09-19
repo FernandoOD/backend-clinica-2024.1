@@ -1,3 +1,4 @@
+import {authenticate} from '@loopback/authentication';
 import {
   Count,
   CountSchema,
@@ -7,24 +8,25 @@ import {
   Where,
 } from '@loopback/repository';
 import {
-  post,
-  param,
+  del,
   get,
   getModelSchemaRef,
+  param,
   patch,
+  post,
   put,
-  del,
   requestBody,
   response,
 } from '@loopback/rest';
 import {Terapeuta} from '../models';
 import {TerapeutaRepository} from '../repositories';
 
+@authenticate('admin')
 export class TerapeutaController {
   constructor(
     @repository(TerapeutaRepository)
-    public terapeutaRepository : TerapeutaRepository,
-  ) {}
+    public terapeutaRepository: TerapeutaRepository,
+  ) { }
 
   @post('/terapeutas')
   @response(200, {
@@ -95,6 +97,7 @@ export class TerapeutaController {
     return this.terapeutaRepository.updateAll(terapeuta, where);
   }
 
+  @authenticate.skip()
   @get('/terapeutas/{id}')
   @response(200, {
     description: 'Terapeuta model instance',

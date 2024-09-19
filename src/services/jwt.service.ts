@@ -22,4 +22,18 @@ export class JwtService {
     }, secretKey);
     return tk;
   }
+
+  /**
+   * Verificar un token
+   */
+
+  VerificarTokenJWT(token: string) {
+    try {
+      let decode = jwt.verify(token, key.jwtKey);
+      return decode;
+    } catch {
+      return null;
+    }
+
+  }
 }
