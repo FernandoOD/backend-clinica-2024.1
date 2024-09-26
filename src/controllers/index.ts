@@ -37,3 +37,5 @@ export * from './usuario.controller';
 export * from './paciente.controller';
 export * from './terapeuta.controller';
 export * from './historia-clinica.controller';
+export * from './carga-archivos.controller';
+export * from './descarga-archivo.controller';
