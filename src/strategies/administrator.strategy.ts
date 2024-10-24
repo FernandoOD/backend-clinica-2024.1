@@ -36,7 +36,7 @@ export class AdministratorStrategy implements AuthenticationStrategy {
         });
         return perfil;
       } else {
-        throw new HttpErrors[401]("El token en valido, pero no tiene los permisos suficientes")
+        throw new HttpErrors[401]("El token es valido, pero no tiene los permisos suficientes")
       }
     }
     else {

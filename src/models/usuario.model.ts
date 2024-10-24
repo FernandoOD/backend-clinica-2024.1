@@ -25,7 +25,7 @@ export class Usuario extends Entity {
     type: 'number',
     required: false,
   })
-  idPersona?: number;
+  idPersona: number;
 
   @belongsTo(() => Rol)
   rolId: string;

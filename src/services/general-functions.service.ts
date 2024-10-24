@@ -1,34 +1,33 @@
-import {injectable, /* inject, */ BindingScope} from '@loopback/core';
+import { /* inject, */ BindingScope, injectable} from '@loopback/core';
 
+import CryptoJS from 'crypto-js';
 import {generate as passGenerator} from 'generate-password';
-import {Keys as key} from '../config/keys';
-const CryptoJS = require("crypto-js");
 
 @injectable({scope: BindingScope.TRANSIENT})
 export class GeneralFunctionsService {
-  constructor(/* Add @inject to inject parameters */) {}
+  constructor(/* Add @inject to inject parameters */) { }
 
   /*
      * Funcion para generar una clave aleatoria
     */
 
-  GenerarClaveAleatoria(): string{
+  GenerarClaveAleatoria(): string {
     let pass = passGenerator({
-        length: 10,
-        numbers: true,
-        uppercase: true,
-        lowercase: true
-      });
+      length: 10,
+      numbers: true,
+      uppercase: true,
+      lowercase: true
+    });
 
     return pass;
-}
+  }
 
-/*
- * Cifrado de contraseña
- */
-  CifrarPassword(password:string): string{
-   // let cipherText = CryptoJS.AES.encrypt('password','key.AESKey').toString();
-    let cipherText = CryptoJS.MD5.encrypt('password','key.AESKey').toString();
+  /*
+   * Cifrado de contraseña
+   */
+  CifrarPassword(password: string): string {
+    // let cipherText = CryptoJS.AES.encrypt('password','key.AESKey').toString();
+    let cipherText = CryptoJS.MD5(password).toString();
     return cipherText;
-}
+  }
 }

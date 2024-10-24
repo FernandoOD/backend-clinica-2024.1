@@ -1,3 +1,4 @@
+import {authenticate} from '@loopback/authentication';
 import {service} from '@loopback/core';
 import {
   Count,
@@ -23,6 +24,7 @@ import {Credenciales, Usuario} from '../models';
 import {UsuarioRepository} from '../repositories';
 import {GeneralFunctionsService, JwtService} from '../services';
 
+@authenticate('admin')
 export class UsuarioController {
   constructor(
     @repository(UsuarioRepository)
@@ -169,6 +171,7 @@ export class UsuarioController {
     await this.usuarioRepository.deleteById(id);
   }
 
+  @authenticate.skip()
   @post('/identificar', {
     responses: {
       '200': {
@@ -188,11 +191,13 @@ export class UsuarioController {
     let usuario = await this.usuarioRepository.findOne({where: {Email: credenciales.email, Password: credenciales.password}});
     if (usuario) {
       let tk = this.serviceJWT.CrearTokenJWT(usuario);
+      let rl = this.serviceJWT.RoleString(tk);
       usuario.Password = '';
       return {
         user: usuario,
-        tokenk: tk
-      };
+        token: tk,
+        rol: rl
+      }
     } else {
       throw new HttpErrors[401]("Usuario o clave incorrecto.")
     }

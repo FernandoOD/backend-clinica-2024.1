@@ -1,11 +1,11 @@
-import {Entity, model, property, hasMany, hasOne} from '@loopback/repository';
-import {EvaluacionProgreso} from './evaluacion-progreso.model';
-import {Mensaje} from './mensaje.model';
+import {Entity, hasMany, hasOne, model, property} from '@loopback/repository';
 import {Consulta} from './consulta.model';
 import {EjercicioPractico} from './ejercicio-practico.model';
+import {EvaluacionProgreso} from './evaluacion-progreso.model';
 import {HistoriaClinica} from './historia-clinica.model';
-import {Terapeuta} from './terapeuta.model';
+import {Mensaje} from './mensaje.model';
 import {PacienteTerapeuta} from './paciente-terapeuta.model';
+import {Terapeuta} from './terapeuta.model';
 
 @model()
 export class Paciente extends Entity {
@@ -52,8 +52,18 @@ export class Paciente extends Entity {
   Email: string;
 
   @property({
-    type: 'date',
-    default: 'CURRENT_TIMESTAMP',
+    type: 'string',
+    jsonSchema: {
+      format: 'date', // Restringe el formato a solo fecha 'YYYY-MM-DD'
+    },
+  })
+  FechaNacimiento?: string;
+
+  @property({
+    type: 'string',
+    jsonSchema: {
+      format: 'date', // Restringe el formato a solo fecha 'YYYY-MM-DD'
+    },
   })
   FechaRegistro?: string;
 

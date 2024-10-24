@@ -1,8 +1,8 @@
-import {Entity, model, property, hasMany} from '@loopback/repository';
-import {ModuloPsicoeducativo} from './modulo-psicoeducativo.model';
+import {Entity, hasMany, model, property} from '@loopback/repository';
 import {Consulta} from './consulta.model';
-import {Mensaje} from './mensaje.model';
 import {EvaluacionProgreso} from './evaluacion-progreso.model';
+import {Mensaje} from './mensaje.model';
+import {ModuloPsicoeducativo} from './modulo-psicoeducativo.model';
 
 @model()
 export class Terapeuta extends Entity {
@@ -33,6 +33,17 @@ export class Terapeuta extends Entity {
 
   @property({
     type: 'string',
+    required: true,
+  })
+  CedulaLicenciatura: string;
+
+  @property({
+    type: 'string',
+  })
+  CedulaEspecialidad: string;
+
+  @property({
+    type: 'string',
   })
   Especialidad?: string;
 
@@ -49,8 +60,10 @@ export class Terapeuta extends Entity {
   Email: string;
 
   @property({
-    type: 'date',
-    default: 'CURRENT_TIMESTAMP',
+    type: 'string',
+    jsonSchema: {
+      format: 'date', // Restringe el formato a solo fecha 'YYYY-MM-DD'
+    },
   })
   FechaRegistro?: string;
 
