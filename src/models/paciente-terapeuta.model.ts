@@ -27,14 +27,18 @@ export class PacienteTerapeuta extends Entity {
   id?: number;
 
   @property({
-    type: 'date',
-    default: 'CURRENT_TIMESTAMP',
+    type: 'string',
+    jsonSchema: {
+      format: 'date', // Restringe el formato a solo fecha 'YYYY-MM-DD'
+    },
   })
   FechaInicio?: string;
 
   @property({
-    type: 'date',
-    default: 'CURRENT_TIMESTAMP',
+    type: 'string',
+    jsonSchema: {
+      format: 'date', // Restringe el formato a solo fecha 'YYYY-MM-DD'
+    },
   })
   FechaFin?: string;
 

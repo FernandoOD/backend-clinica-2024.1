@@ -1,110 +1,154 @@
+import {authenticate} from '@loopback/authentication';
 import {
   Count,
   CountSchema,
   Filter,
+  FilterExcludingWhere,
   repository,
   Where,
 } from '@loopback/repository';
-  import {
+import {
   del,
   get,
   getModelSchemaRef,
-  getWhereSchemaFor,
   param,
   patch,
   post,
+  put,
   requestBody,
+  response,
 } from '@loopback/rest';
-import {
-Paciente,
-PacienteTerapeuta,
-Terapeuta,
-} from '../models';
-import {PacienteRepository} from '../repositories';
+import {PacienteTerapeuta} from '../models';
+import {PacienteTerapeutaRepository} from '../repositories';
 
+@authenticate('admin')
 export class PacienteTerapeutaController {
   constructor(
-    @repository(PacienteRepository) protected pacienteRepository: PacienteRepository,
+    @repository(PacienteTerapeutaRepository)
+    public pacienteTerapeutaRepository: PacienteTerapeutaRepository,
   ) { }
 
-  @get('/pacientes/{id}/terapeutas', {
-    responses: {
-      '200': {
-        description: 'Array of Paciente has many Terapeuta through PacienteTerapeuta',
-        content: {
-          'application/json': {
-            schema: {type: 'array', items: getModelSchemaRef(Terapeuta)},
-          },
+  @post('/paciente-terapeutas')
+  @response(200, {
+    description: 'PacienteTerapeuta model instance',
+    content: {'application/json': {schema: getModelSchemaRef(PacienteTerapeuta)}},
+  })
+  async create(
+    @requestBody({
+      content: {
+        'application/json': {
+          schema: getModelSchemaRef(PacienteTerapeuta, {
+            title: 'NewPacienteTerapeuta',
+            exclude: ['id'],
+          }),
+        },
+      },
+    })
+    pacienteTerapeuta: Omit<PacienteTerapeuta, 'id'>,
+  ): Promise<PacienteTerapeuta> {
+    return this.pacienteTerapeutaRepository.create(pacienteTerapeuta);
+  }
+
+  @get('/paciente-terapeutas/count')
+  @response(200, {
+    description: 'PacienteTerapeuta model count',
+    content: {'application/json': {schema: CountSchema}},
+  })
+  async count(
+    @param.where(PacienteTerapeuta) where?: Where<PacienteTerapeuta>,
+  ): Promise<Count> {
+    return this.pacienteTerapeutaRepository.count(where);
+  }
+
+  @authenticate.skip()
+  @get('/paciente-terapeutas')
+  @response(200, {
+    description: 'Array of PacienteTerapeuta model instances',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'array',
+          items: getModelSchemaRef(PacienteTerapeuta, {includeRelations: true}),
         },
       },
     },
   })
   async find(
-    @param.path.number('id') id: number,
-    @param.query.object('filter') filter?: Filter<Terapeuta>,
-  ): Promise<Terapeuta[]> {
-    return this.pacienteRepository.terapeutas(id).find(filter);
+    @param.filter(PacienteTerapeuta) filter?: Filter<PacienteTerapeuta>,
+  ): Promise<PacienteTerapeuta[]> {
+    return this.pacienteTerapeutaRepository.find(filter);
   }
 
-  @post('/pacientes/{id}/terapeutas', {
-    responses: {
-      '200': {
-        description: 'create a Terapeuta model instance',
-        content: {'application/json': {schema: getModelSchemaRef(Terapeuta)}},
-      },
-    },
+  @patch('/paciente-terapeutas')
+  @response(200, {
+    description: 'PacienteTerapeuta PATCH success count',
+    content: {'application/json': {schema: CountSchema}},
   })
-  async create(
-    @param.path.number('id') id: typeof Paciente.prototype.id,
+  async updateAll(
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(Terapeuta, {
-            title: 'NewTerapeutaInPaciente',
-            exclude: ['id'],
-          }),
-        },
-      },
-    }) terapeuta: Omit<Terapeuta, 'id'>,
-  ): Promise<Terapeuta> {
-    return this.pacienteRepository.terapeutas(id).create(terapeuta);
-  }
-
-  @patch('/pacientes/{id}/terapeutas', {
-    responses: {
-      '200': {
-        description: 'Paciente.Terapeuta PATCH success count',
-        content: {'application/json': {schema: CountSchema}},
-      },
-    },
-  })
-  async patch(
-    @param.path.number('id') id: number,
-    @requestBody({
-      content: {
-        'application/json': {
-          schema: getModelSchemaRef(Terapeuta, {partial: true}),
+          schema: getModelSchemaRef(PacienteTerapeuta, {partial: true}),
         },
       },
     })
-    terapeuta: Partial<Terapeuta>,
-    @param.query.object('where', getWhereSchemaFor(Terapeuta)) where?: Where<Terapeuta>,
+    pacienteTerapeuta: PacienteTerapeuta,
+    @param.where(PacienteTerapeuta) where?: Where<PacienteTerapeuta>,
   ): Promise<Count> {
-    return this.pacienteRepository.terapeutas(id).patch(terapeuta, where);
+    return this.pacienteTerapeutaRepository.updateAll(pacienteTerapeuta, where);
   }
 
-  @del('/pacientes/{id}/terapeutas', {
-    responses: {
-      '200': {
-        description: 'Paciente.Terapeuta DELETE success count',
-        content: {'application/json': {schema: CountSchema}},
+  @authenticate.skip()
+  @get('/paciente-terapeutas/{id}')
+  @response(200, {
+    description: 'PacienteTerapeuta model instance',
+    content: {
+      'application/json': {
+        schema: getModelSchemaRef(PacienteTerapeuta, {includeRelations: true}),
       },
     },
   })
-  async delete(
+  async findById(
     @param.path.number('id') id: number,
-    @param.query.object('where', getWhereSchemaFor(Terapeuta)) where?: Where<Terapeuta>,
-  ): Promise<Count> {
-    return this.pacienteRepository.terapeutas(id).delete(where);
+    @param.filter(PacienteTerapeuta, {exclude: 'where'}) filter?: FilterExcludingWhere<PacienteTerapeuta>
+  ): Promise<PacienteTerapeuta> {
+    return this.pacienteTerapeutaRepository.findById(id, filter);
+  }
+
+  @patch('/paciente-terapeutas/{id}')
+  @response(204, {
+    description: 'PacienteTerapeuta PATCH success',
+  })
+  async updateById(
+    @param.path.number('id') id: number,
+    @requestBody({
+      content: {
+        'application/json': {
+          schema: getModelSchemaRef(PacienteTerapeuta, {partial: true}),
+        },
+      },
+    })
+    pacienteTerapeuta: PacienteTerapeuta,
+  ): Promise<void> {
+    await this.pacienteTerapeutaRepository.updateById(id, pacienteTerapeuta);
+  }
+
+  @put('/paciente-terapeutas/{id}')
+  @response(204, {
+    description: 'PacienteTerapeuta PUT success',
+  })
+  async replaceById(
+    @param.path.number('id') id: number,
+    @requestBody() pacienteTerapeuta: PacienteTerapeuta,
+  ): Promise<void> {
+    await this.pacienteTerapeutaRepository.replaceById(id, pacienteTerapeuta);
+  }
+
+  @del('/paciente-terapeutas/{id}')
+  @response(204, {
+    description: 'PacienteTerapeuta DELETE success',
+  })
+  async deleteById(@param.path.number('id') id: number): Promise<void> {
+    await this.pacienteTerapeutaRepository.deleteById(id);
   }
 }

@@ -39,3 +39,8 @@ export * from './terapeuta.controller';
 export * from './historia-clinica.controller';
 export * from './carga-archivos.controller';
 export * from './descarga-archivo.controller';
+export * from './nota-clinica.controller';
+export * from './terapeuta-paciente.controller';
+export * from './paciente-terapeuta.controller';
+export * from './test-psicometrico.controller';
+export * from './consulta-test-psicometrico.controller';

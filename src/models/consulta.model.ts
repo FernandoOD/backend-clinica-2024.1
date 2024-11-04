@@ -34,8 +34,10 @@ export class Consulta extends Entity {
   id?: number;
 
   @property({
-    type: 'date',
-    default: 'CURRENT_TIMESTAMP',
+    type: 'string',
+    jsonSchema: {
+      format: 'date', // Restringe el formato a solo fecha 'YYYY-MM-DD'
+    },
   })
   FechaConsulta?: string;
 

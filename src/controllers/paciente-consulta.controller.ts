@@ -1,3 +1,4 @@
+import {authenticate} from '@loopback/authentication';
 import {
   Count,
   CountSchema,
@@ -16,11 +17,12 @@ import {
   requestBody,
 } from '@loopback/rest';
 import {
-  Paciente,
   Consulta,
+  Paciente,
 } from '../models';
 import {PacienteRepository} from '../repositories';
 
+@authenticate('admin', 'therapist')
 export class PacienteConsultaController {
   constructor(
     @repository(PacienteRepository) protected pacienteRepository: PacienteRepository,
