@@ -163,12 +163,13 @@ export class UsuarioController {
     await this.usuarioRepository.replaceById(id, usuario);
   }
 
-  @del('/usuarios/{id}')
+  @del('/usuarios/{idPersona}')
   @response(204, {
     description: 'Usuario DELETE success',
   })
-  async deleteById(@param.path.string('id') id: string): Promise<void> {
-    await this.usuarioRepository.deleteById(id);
+  async deleteById(@param.path.number('idPersona') personaId: number): Promise<void> {
+    let usuario = await this.usuarioRepository.findOne({where: {idPersona: personaId}});
+    await this.usuarioRepository.deleteById(usuario?.id);
   }
 
   @authenticate.skip()

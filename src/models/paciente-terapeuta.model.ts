@@ -39,6 +39,7 @@ export class PacienteTerapeuta extends Entity {
     jsonSchema: {
       format: 'date', // Restringe el formato a solo fecha 'YYYY-MM-DD'
     },
+    default: '0000-00-00',
   })
   FechaFin?: string;
 
@@ -48,6 +49,7 @@ export class PacienteTerapeuta extends Entity {
   pacienteId?: number;
 
   @property({
+    required: true,
     type: 'number',
   })
   terapeutaId?: number;

@@ -1,14 +1,15 @@
-import {inject, Getter} from '@loopback/core';
-import {DefaultCrudRepository, repository, HasManyRepositoryFactory, HasOneRepositoryFactory, HasManyThroughRepositoryFactory} from '@loopback/repository';
+import {Getter, inject} from '@loopback/core';
+import {DefaultCrudRepository, HasManyRepositoryFactory, HasManyThroughRepositoryFactory, HasOneRepositoryFactory, repository} from '@loopback/repository';
 import {MysqldsDataSource} from '../datasources';
-import {Paciente, PacienteRelations, EvaluacionProgreso, Mensaje, Consulta, EjercicioPractico, HistoriaClinica, Terapeuta, PacienteTerapeuta} from '../models';
-import {EvaluacionProgresoRepository} from './evaluacion-progreso.repository';
-import {MensajeRepository} from './mensaje.repository';
+import {Consulta, EvaluacionProgreso, HistoriaClinica, Mensaje, Paciente, PacienteRelations, PacienteTerapeuta, Terapeuta, EjercicioPractico, PacienteEjercicioPractico} from '../models';
 import {ConsultaRepository} from './consulta.repository';
-import {EjercicioPracticoRepository} from './ejercicio-practico.repository';
+import {EvaluacionProgresoRepository} from './evaluacion-progreso.repository';
 import {HistoriaClinicaRepository} from './historia-clinica.repository';
+import {MensajeRepository} from './mensaje.repository';
 import {PacienteTerapeutaRepository} from './paciente-terapeuta.repository';
 import {TerapeutaRepository} from './terapeuta.repository';
+import {PacienteEjercicioPracticoRepository} from './paciente-ejercicio-practico.repository';
+import {EjercicioPracticoRepository} from './ejercicio-practico.repository';
 
 export class PacienteRepository extends DefaultCrudRepository<
   Paciente,
@@ -22,25 +23,28 @@ export class PacienteRepository extends DefaultCrudRepository<
 
   public readonly consultas: HasManyRepositoryFactory<Consulta, typeof Paciente.prototype.id>;
 
-  public readonly ejercicioPracticos: HasManyRepositoryFactory<EjercicioPractico, typeof Paciente.prototype.id>;
-
   public readonly historiaClinica: HasOneRepositoryFactory<HistoriaClinica, typeof Paciente.prototype.id>;
 
   public readonly terapeutas: HasManyThroughRepositoryFactory<Terapeuta, typeof Terapeuta.prototype.id,
-          PacienteTerapeuta,
+    PacienteTerapeuta,
+    typeof Paciente.prototype.id
+  >;
+
+  public readonly ejercicioPracticos: HasManyThroughRepositoryFactory<EjercicioPractico, typeof EjercicioPractico.prototype.id,
+          PacienteEjercicioPractico,
           typeof Paciente.prototype.id
         >;
 
   constructor(
-    @inject('datasources.mysqlds') dataSource: MysqldsDataSource, @repository.getter('EvaluacionProgresoRepository') protected evaluacionProgresoRepositoryGetter: Getter<EvaluacionProgresoRepository>, @repository.getter('MensajeRepository') protected mensajeRepositoryGetter: Getter<MensajeRepository>, @repository.getter('ConsultaRepository') protected consultaRepositoryGetter: Getter<ConsultaRepository>, @repository.getter('EjercicioPracticoRepository') protected ejercicioPracticoRepositoryGetter: Getter<EjercicioPracticoRepository>, @repository.getter('HistoriaClinicaRepository') protected historiaClinicaRepositoryGetter: Getter<HistoriaClinicaRepository>, @repository.getter('PacienteTerapeutaRepository') protected pacienteTerapeutaRepositoryGetter: Getter<PacienteTerapeutaRepository>, @repository.getter('TerapeutaRepository') protected terapeutaRepositoryGetter: Getter<TerapeutaRepository>,
+    @inject('datasources.mysqlds') dataSource: MysqldsDataSource, @repository.getter('EvaluacionProgresoRepository') protected evaluacionProgresoRepositoryGetter: Getter<EvaluacionProgresoRepository>, @repository.getter('MensajeRepository') protected mensajeRepositoryGetter: Getter<MensajeRepository>, @repository.getter('ConsultaRepository') protected consultaRepositoryGetter: Getter<ConsultaRepository>, @repository.getter('HistoriaClinicaRepository') protected historiaClinicaRepositoryGetter: Getter<HistoriaClinicaRepository>, @repository.getter('PacienteTerapeutaRepository') protected pacienteTerapeutaRepositoryGetter: Getter<PacienteTerapeutaRepository>, @repository.getter('TerapeutaRepository') protected terapeutaRepositoryGetter: Getter<TerapeutaRepository>, @repository.getter('PacienteEjercicioPracticoRepository') protected pacienteEjercicioPracticoRepositoryGetter: Getter<PacienteEjercicioPracticoRepository>, @repository.getter('EjercicioPracticoRepository') protected ejercicioPracticoRepositoryGetter: Getter<EjercicioPracticoRepository>,
   ) {
     super(Paciente, dataSource);
+    this.ejercicioPracticos = this.createHasManyThroughRepositoryFactoryFor('ejercicioPracticos', ejercicioPracticoRepositoryGetter, pacienteEjercicioPracticoRepositoryGetter,);
+    this.registerInclusionResolver('ejercicioPracticos', this.ejercicioPracticos.inclusionResolver);
     this.terapeutas = this.createHasManyThroughRepositoryFactoryFor('terapeutas', terapeutaRepositoryGetter, pacienteTerapeutaRepositoryGetter,);
     this.registerInclusionResolver('terapeutas', this.terapeutas.inclusionResolver);
     this.historiaClinica = this.createHasOneRepositoryFactoryFor('historiaClinica', historiaClinicaRepositoryGetter);
     this.registerInclusionResolver('historiaClinica', this.historiaClinica.inclusionResolver);
-    this.ejercicioPracticos = this.createHasManyRepositoryFactoryFor('ejercicioPracticos', ejercicioPracticoRepositoryGetter,);
-    this.registerInclusionResolver('ejercicioPracticos', this.ejercicioPracticos.inclusionResolver);
     this.consultas = this.createHasManyRepositoryFactoryFor('consultas', consultaRepositoryGetter,);
     this.registerInclusionResolver('consultas', this.consultas.inclusionResolver);
     this.mensajes = this.createHasManyRepositoryFactoryFor('mensajes', mensajeRepositoryGetter,);

@@ -2,9 +2,8 @@ import {Entity, hasMany, model, property} from '@loopback/repository';
 import {Consulta} from './consulta.model';
 import {EvaluacionProgreso} from './evaluacion-progreso.model';
 import {Mensaje} from './mensaje.model';
-import {ModuloPsicoeducativo} from './modulo-psicoeducativo.model';
-import {Paciente} from './paciente.model';
 import {PacienteTerapeuta} from './paciente-terapeuta.model';
+import {Paciente} from './paciente.model';
 
 @model()
 export class Terapeuta extends Entity {
@@ -69,8 +68,6 @@ export class Terapeuta extends Entity {
   })
   FechaRegistro?: string;
 
-  @hasMany(() => ModuloPsicoeducativo)
-  modulosPsicoeducativos: ModuloPsicoeducativo[];
 
   @hasMany(() => Consulta)
   consultas: Consulta[];

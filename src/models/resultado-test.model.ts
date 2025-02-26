@@ -29,16 +29,18 @@ export class ResultadoTest extends Entity {
   id?: number;
 
   @property({
-    type: 'date',
-    default: 'CURRENT_TIMESTAMP',
+    type: 'string',
+    jsonSchema: {
+      format: 'date', // Restringe el formato a solo fecha 'YYYY-MM-DD'
+    },
   })
   FechaRealizacion?: string;
 
   @property({
-    type: 'number',
+    type: 'string',
     required: true,
   })
-  Puntuacion: number;
+  Puntuacion: string;
 
   @property({
     type: 'string',

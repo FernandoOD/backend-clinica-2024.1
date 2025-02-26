@@ -14,3 +14,4 @@ export * from './paciente.repository';
 export * from './resultado-test.repository';
 export * from './terapeuta.repository';
 export * from './test-psicometrico.repository';
+export * from './paciente-ejercicio-practico.repository';

@@ -24,6 +24,19 @@ export class JwtService {
     return tk;
   }
 
+  CrearTokenTest(id: number, nombre: String, consultaId: number) {
+    let secretKey = key.jwtKey;
+    let tk = jwt.sign({
+      exp: key.expTimeJWT,
+      data: {
+        id: id,
+        nombre: nombre,
+        consultaId: consultaId
+      }
+    }, secretKey);
+    return tk;
+  }
+
   /**
    * Verificar un token
    */

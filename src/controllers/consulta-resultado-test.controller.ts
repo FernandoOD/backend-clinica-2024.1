@@ -1,3 +1,5 @@
+import {authenticate} from '@loopback/authentication';
+import {service} from '@loopback/core';
 import {
   Count,
   CountSchema,
@@ -10,6 +12,7 @@ import {
   get,
   getModelSchemaRef,
   getWhereSchemaFor,
+  HttpErrors,
   param,
   patch,
   post,
@@ -18,12 +21,20 @@ import {
 import {
   Consulta,
   ResultadoTest,
+  TestSelect,
 } from '../models';
-import {ConsultaRepository} from '../repositories';
+import {ConsultaRepository, TestPsicometricoRepository} from '../repositories';
+import {GeneralFunctionsService, JwtService} from '../services';
 
+@authenticate('patient')
 export class ConsultaResultadoTestController {
   constructor(
     @repository(ConsultaRepository) protected consultaRepository: ConsultaRepository,
+    @repository(TestPsicometricoRepository) protected testPsicometricoRepository: TestPsicometricoRepository,
+    @service(GeneralFunctionsService)
+    public service: GeneralFunctionsService,
+    @service(JwtService)
+    public serviceJWT: JwtService
   ) { }
 
   @get('/consultas/{id}/resultado-tests', {
@@ -45,6 +56,7 @@ export class ConsultaResultadoTestController {
     return this.consultaRepository.resultadosTests(id).find(filter);
   }
 
+  @authenticate('test')
   @post('/consultas/{id}/resultado-tests', {
     responses: {
       '200': {
@@ -106,5 +118,34 @@ export class ConsultaResultadoTestController {
     @param.query.object('where', getWhereSchemaFor(ResultadoTest)) where?: Where<ResultadoTest>,
   ): Promise<Count> {
     return this.consultaRepository.resultadosTests(id).delete(where);
+  }
+
+  @post('/generarToken', {
+    responses: {
+      '200': {
+        description: 'Dar acceso para responder'
+      }
+    }
+  })
+  async generarToken(
+    @requestBody({
+      content: {
+        'application/json': {
+          schema: getModelSchemaRef(TestSelect),
+        },
+      },
+    }) testSelect: TestSelect
+  ): Promise<Object> {
+    let test = await this.testPsicometricoRepository.findOne({where: {id: testSelect.id}})
+    if (test) {
+      let tk = this.serviceJWT.CrearTokenTest(testSelect.id, testSelect.nombre, testSelect.consultaId);
+      return {
+        test: test,
+        token: tk,
+        consultaId: testSelect.consultaId
+      }
+    } else {
+      throw new HttpErrors[401]("Test no encontrado")
+    }
   }
 }

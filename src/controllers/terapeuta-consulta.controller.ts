@@ -1,7 +1,9 @@
+import {authenticate} from '@loopback/authentication';
 import {
   Count,
   CountSchema,
   Filter,
+  FilterExcludingWhere,
   repository,
   Where,
 } from '@loopback/repository';
@@ -16,14 +18,16 @@ import {
   requestBody,
 } from '@loopback/rest';
 import {
-  Terapeuta,
   Consulta,
+  Terapeuta,
 } from '../models';
-import {TerapeutaRepository} from '../repositories';
+import {ConsultaRepository, TerapeutaRepository} from '../repositories';
 
+@authenticate('admin', 'therapist')
 export class TerapeutaConsultaController {
   constructor(
     @repository(TerapeutaRepository) protected terapeutaRepository: TerapeutaRepository,
+    @repository(ConsultaRepository) protected consultaRepository: ConsultaRepository,
   ) { }
 
   @get('/terapeutas/{id}/consultas', {
@@ -45,6 +49,24 @@ export class TerapeutaConsultaController {
     return this.terapeutaRepository.consultas(id).find(filter);
   }
 
+  @get('consulta/{id}', {
+    responses: {
+      '200': {
+        description: 'Consulta model instance',
+        content: {
+          'application/json': {
+            schema: getModelSchemaRef(Consulta, {includeRelations: true}),
+          },
+        },
+      },
+    },
+  })
+  async findById(
+    @param.path.number('id') id: number,
+    @param.filter(Consulta, {exclude: 'where'}) filter?: FilterExcludingWhere<Consulta>
+  ): Promise<Consulta> {
+    return this.consultaRepository.findById(id, filter);
+  }
   @post('/terapeutas/{id}/consultas', {
     responses: {
       '200': {

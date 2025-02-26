@@ -1,16 +1,9 @@
-import {belongsTo, Entity, hasMany, model, property} from '@loopback/repository';
+import {Entity, hasMany, model, property} from '@loopback/repository';
 import {EjercicioPractico} from './ejercicio-practico.model';
-import {Terapeuta} from './terapeuta.model';
 
 @model({
   settings: {
     foreignKeys: {
-      fk_terapeuta_id: {
-        name: 'fk_terapeuta_id',
-        entity: 'Terapeuta',
-        entityKey: 'id',
-        foreignKey: 'terapeutaId',
-      },
     },
   },
 })
@@ -35,13 +28,19 @@ export class ModuloPsicoeducativo extends Entity {
   Descripcion: string;
 
   @property({
-    type: 'date',
-    default: 'CURRENT_TIMESTAMP',
+    type: 'string',
+    jsonSchema: {
+      format: 'date', // Restringe el formato a solo fecha 'YYYY-MM-DD'
+    },
   })
   FechaCreacion?: string;
 
-  @belongsTo(() => Terapeuta, {name: 'terapeutaModulo'})
-  terapeutaId: number;
+  @property({
+    type: 'string',
+    required: true,
+  })
+  UrlVideo: string;
+
 
   @hasMany(() => EjercicioPractico)
   ejercicioPracticos: EjercicioPractico[];

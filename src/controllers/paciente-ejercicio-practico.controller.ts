@@ -5,7 +5,7 @@ import {
   repository,
   Where,
 } from '@loopback/repository';
-import {
+  import {
   del,
   get,
   getModelSchemaRef,
@@ -16,8 +16,9 @@ import {
   requestBody,
 } from '@loopback/rest';
 import {
-  Paciente,
-  EjercicioPractico,
+Paciente,
+PacienteEjercicioPractico,
+EjercicioPractico,
 } from '../models';
 import {PacienteRepository} from '../repositories';
 
@@ -29,7 +30,7 @@ export class PacienteEjercicioPracticoController {
   @get('/pacientes/{id}/ejercicio-practicos', {
     responses: {
       '200': {
-        description: 'Array of Paciente has many EjercicioPractico',
+        description: 'Array of Paciente has many EjercicioPractico through PacienteEjercicioPractico',
         content: {
           'application/json': {
             schema: {type: 'array', items: getModelSchemaRef(EjercicioPractico)},
@@ -48,7 +49,7 @@ export class PacienteEjercicioPracticoController {
   @post('/pacientes/{id}/ejercicio-practicos', {
     responses: {
       '200': {
-        description: 'Paciente model instance',
+        description: 'create a EjercicioPractico model instance',
         content: {'application/json': {schema: getModelSchemaRef(EjercicioPractico)}},
       },
     },
@@ -61,7 +62,6 @@ export class PacienteEjercicioPracticoController {
           schema: getModelSchemaRef(EjercicioPractico, {
             title: 'NewEjercicioPracticoInPaciente',
             exclude: ['id'],
-            optional: ['pacienteId']
           }),
         },
       },

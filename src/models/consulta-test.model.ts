@@ -36,6 +36,12 @@ export class ConsultaTest extends Entity {
   })
   testPsicometricoId?: number;
 
+  @property({
+    type: 'boolean',
+    default: false,
+  })
+  contestado: boolean;
+
   constructor(data?: Partial<ConsultaTest>) {
     super(data);
   }

@@ -1,4 +1,3 @@
-import {authenticate} from '@loopback/authentication';
 import {
   Count,
   CountSchema,
@@ -6,7 +5,7 @@ import {
   repository,
   Where,
 } from '@loopback/repository';
-import {
+  import {
   del,
   get,
   getModelSchemaRef,
@@ -17,21 +16,21 @@ import {
   requestBody,
 } from '@loopback/rest';
 import {
-  Consulta,
-  Paciente,
+TestPsicometrico,
+ConsultaTest,
+Consulta,
 } from '../models';
-import {PacienteRepository} from '../repositories';
+import {TestPsicometricoRepository} from '../repositories';
 
-@authenticate('admin', 'therapist')
-export class PacienteConsultaController {
+export class TestPsicometricoConsultaController {
   constructor(
-    @repository(PacienteRepository) protected pacienteRepository: PacienteRepository,
+    @repository(TestPsicometricoRepository) protected testPsicometricoRepository: TestPsicometricoRepository,
   ) { }
-  @authenticate('patient')
-  @get('/pacientes/{id}/consultas', {
+
+  @get('/test-psicometricos/{id}/consultas', {
     responses: {
       '200': {
-        description: 'Array of Paciente has many Consulta',
+        description: 'Array of TestPsicometrico has many Consulta through ConsultaTest',
         content: {
           'application/json': {
             schema: {type: 'array', items: getModelSchemaRef(Consulta)},
@@ -44,38 +43,37 @@ export class PacienteConsultaController {
     @param.path.number('id') id: number,
     @param.query.object('filter') filter?: Filter<Consulta>,
   ): Promise<Consulta[]> {
-    return this.pacienteRepository.consultas(id).find(filter);
+    return this.testPsicometricoRepository.consultas(id).find(filter);
   }
 
-  @post('/pacientes/{id}/consultas', {
+  @post('/test-psicometricos/{id}/consultas', {
     responses: {
       '200': {
-        description: 'Paciente model instance',
+        description: 'create a Consulta model instance',
         content: {'application/json': {schema: getModelSchemaRef(Consulta)}},
       },
     },
   })
   async create(
-    @param.path.number('id') id: typeof Paciente.prototype.id,
+    @param.path.number('id') id: typeof TestPsicometrico.prototype.id,
     @requestBody({
       content: {
         'application/json': {
           schema: getModelSchemaRef(Consulta, {
-            title: 'NewConsultaInPaciente',
+            title: 'NewConsultaInTestPsicometrico',
             exclude: ['id'],
-            optional: ['pacienteId']
           }),
         },
       },
     }) consulta: Omit<Consulta, 'id'>,
   ): Promise<Consulta> {
-    return this.pacienteRepository.consultas(id).create(consulta);
+    return this.testPsicometricoRepository.consultas(id).create(consulta);
   }
 
-  @patch('/pacientes/{id}/consultas', {
+  @patch('/test-psicometricos/{id}/consultas', {
     responses: {
       '200': {
-        description: 'Paciente.Consulta PATCH success count',
+        description: 'TestPsicometrico.Consulta PATCH success count',
         content: {'application/json': {schema: CountSchema}},
       },
     },
@@ -92,13 +90,13 @@ export class PacienteConsultaController {
     consulta: Partial<Consulta>,
     @param.query.object('where', getWhereSchemaFor(Consulta)) where?: Where<Consulta>,
   ): Promise<Count> {
-    return this.pacienteRepository.consultas(id).patch(consulta, where);
+    return this.testPsicometricoRepository.consultas(id).patch(consulta, where);
   }
 
-  @del('/pacientes/{id}/consultas', {
+  @del('/test-psicometricos/{id}/consultas', {
     responses: {
       '200': {
-        description: 'Paciente.Consulta DELETE success count',
+        description: 'TestPsicometrico.Consulta DELETE success count',
         content: {'application/json': {schema: CountSchema}},
       },
     },
@@ -107,6 +105,6 @@ export class PacienteConsultaController {
     @param.path.number('id') id: number,
     @param.query.object('where', getWhereSchemaFor(Consulta)) where?: Where<Consulta>,
   ): Promise<Count> {
-    return this.pacienteRepository.consultas(id).delete(where);
+    return this.testPsicometricoRepository.consultas(id).delete(where);
   }
 }

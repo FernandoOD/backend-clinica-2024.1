@@ -3,9 +3,8 @@ import {
   Count,
   CountSchema,
   Filter,
-  FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
   del,
@@ -111,7 +110,7 @@ export class ConsultaTestPsicometricoController {
   ): Promise<Count> {
     return this.consultaTestRepository.updateAll(consultaTest, where);
   }
-
+  @authenticate('patient', 'therapist')
   @get('/consulta-tests/{id}')
   @response(200, {
     description: 'ConsultaTest model instance',
@@ -123,10 +122,12 @@ export class ConsultaTestPsicometricoController {
   })
   async findById(
     @param.path.number('id') id: number,
-    @param.filter(ConsultaTest, {exclude: 'where'}) filter?: FilterExcludingWhere<ConsultaTest>
-  ): Promise<ConsultaTest> {
-    return this.consultaTestRepository.findById(id, filter);
+  ): Promise<ConsultaTest[]> {
+    return this.consultaTestRepository.find({
+      where: {consultaId: id},
+    });
   }
+
 
   @patch('/consulta-tests/{id}')
   @response(204, {
@@ -146,6 +147,7 @@ export class ConsultaTestPsicometricoController {
     await this.consultaTestRepository.updateById(id, consultaTest);
   }
 
+  @authenticate('patient')
   @put('/consulta-tests/{id}')
   @response(204, {
     description: 'ConsultaTest PUT success',

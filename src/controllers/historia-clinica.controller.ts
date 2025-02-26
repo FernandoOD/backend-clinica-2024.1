@@ -1,3 +1,4 @@
+import {authenticate} from '@loopback/authentication';
 import {
   Count,
   CountSchema,
@@ -7,24 +8,25 @@ import {
   Where,
 } from '@loopback/repository';
 import {
-  post,
-  param,
+  del,
   get,
   getModelSchemaRef,
+  param,
   patch,
+  post,
   put,
-  del,
   requestBody,
   response,
 } from '@loopback/rest';
 import {HistoriaClinica} from '../models';
 import {HistoriaClinicaRepository} from '../repositories';
 
+@authenticate('admin')
 export class HistoriaClinicaController {
   constructor(
     @repository(HistoriaClinicaRepository)
-    public historiaClinicaRepository : HistoriaClinicaRepository,
-  ) {}
+    public historiaClinicaRepository: HistoriaClinicaRepository,
+  ) { }
 
   @post('/historias-clinicas')
   @response(200, {
@@ -58,6 +60,7 @@ export class HistoriaClinicaController {
     return this.historiaClinicaRepository.count(where);
   }
 
+  @authenticate.skip()
   @get('/historias-clinicas')
   @response(200, {
     description: 'Array of HistoriaClinica model instances',
@@ -95,6 +98,7 @@ export class HistoriaClinicaController {
     return this.historiaClinicaRepository.updateAll(historiaClinica, where);
   }
 
+  @authenticate.skip()
   @get('/historias-clinicas/{id}')
   @response(200, {
     description: 'HistoriaClinica model instance',

@@ -1,6 +1,7 @@
-import {belongsTo, Entity, model, property} from '@loopback/repository';
+import {belongsTo, Entity, model, property, hasMany} from '@loopback/repository';
 import {ModuloPsicoeducativo} from './modulo-psicoeducativo.model';
 import {Paciente} from './paciente.model';
+import {PacienteEjercicioPractico} from './paciente-ejercicio-practico.model';
 
 @model({
   settings: {
@@ -10,12 +11,6 @@ import {Paciente} from './paciente.model';
         entity: 'ModuloPsicoeducativo',
         entityKey: 'id',
         foreignKey: 'moduloPsicoeducativoId',
-      },
-      fk_paciente_id: {
-        name: 'fk_paciente_id',
-        entity: 'Paciente',
-        entityKey: 'id',
-        foreignKey: 'pacienteId',
       },
     },
   },
@@ -32,6 +27,12 @@ export class EjercicioPractico extends Entity {
     type: 'string',
     required: true,
   })
+  Titulo: string;
+
+  @property({
+    type: 'string',
+    required: true,
+  })
   Descripcion: string;
 
   @property({
@@ -41,16 +42,18 @@ export class EjercicioPractico extends Entity {
   Instrucciones: string;
 
   @property({
-    type: 'date',
-    default: 'CURRENT_TIMESTAMP',
+    type: 'string',
+    jsonSchema: {
+      format: 'date', // Restringe el formato a solo fecha 'YYYY-MM-DD'
+    },
   })
   FechaCreacion?: string;
 
-  @belongsTo(() => Paciente, {name: 'pacienteEjercicio'})
-  pacienteId: number;
-
   @belongsTo(() => ModuloPsicoeducativo)
   moduloPsicoeducativoId: number;
+
+  @hasMany(() => Paciente, {through: {model: () => PacienteEjercicioPractico}})
+  pacienteEjercicios: Paciente[];
 
   constructor(data?: Partial<EjercicioPractico>) {
     super(data);

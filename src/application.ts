@@ -12,6 +12,7 @@ import path from 'path';
 import {MySequence} from './sequence';
 import {AdministratorStrategy} from './strategies/administrator.strategy';
 import {PatientStrategy} from './strategies/patient.strategy';
+import {TestStrategy} from './strategies/test.strategy';
 import {TherapistStrategy} from './strategies/therapist.strategy';
 
 export {ApplicationConfig};
@@ -48,6 +49,7 @@ export class App extends BootMixin(
     registerAuthenticationStrategy(this, AdministratorStrategy);
     registerAuthenticationStrategy(this, PatientStrategy);
     registerAuthenticationStrategy(this, TherapistStrategy);
+    registerAuthenticationStrategy(this, TestStrategy);
     this.component(AuthenticationComponent);
   }
 }

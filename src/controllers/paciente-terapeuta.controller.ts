@@ -151,4 +151,21 @@ export class PacienteTerapeutaController {
   async deleteById(@param.path.number('id') id: number): Promise<void> {
     await this.pacienteTerapeutaRepository.deleteById(id);
   }
+
+  @get('/pacientes/{id}/terapeuta')
+  @response(200, {
+    description: 'Encontrar Terapeuta Por ID Paciente',
+    content: {
+      'application/json': {
+        schema: getModelSchemaRef(PacienteTerapeuta, {includeRelations: true}),
+      },
+    },
+  })
+  async findTerapeutaByPacienteId(
+    @param.path.number('id') pacienteId: number,
+  ): Promise<PacienteTerapeuta | null> {
+    return this.pacienteTerapeutaRepository.findOne({
+      where: {pacienteId: pacienteId, FechaFin: "0000-00-00"},
+    });
+  }
 }

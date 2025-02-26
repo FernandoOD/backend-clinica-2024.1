@@ -15,3 +15,5 @@ export * from './evaluacion-progreso.model';
 export * from './rol.model';
 export * from './usuario.model';
 export * from './credenciales.model';
+export * from './paciente-ejercicio-practico.model';
+export * from './test-select.model';

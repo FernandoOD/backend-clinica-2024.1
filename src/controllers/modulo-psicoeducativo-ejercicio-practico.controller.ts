@@ -1,3 +1,4 @@
+import {authenticate} from '@loopback/authentication';
 import {
   Count,
   CountSchema,
@@ -13,19 +14,21 @@ import {
   param,
   patch,
   post,
-  requestBody,
+  requestBody
 } from '@loopback/rest';
 import {
-  ModuloPsicoeducativo,
   EjercicioPractico,
+  ModuloPsicoeducativo,
 } from '../models';
-import {ModuloPsicoeducativoRepository} from '../repositories';
+import {EjercicioPracticoRepository, ModuloPsicoeducativoRepository} from '../repositories';
 
+@authenticate('admin', 'therapist')
 export class ModuloPsicoeducativoEjercicioPracticoController {
   constructor(
     @repository(ModuloPsicoeducativoRepository) protected moduloPsicoeducativoRepository: ModuloPsicoeducativoRepository,
+    @repository(EjercicioPracticoRepository) protected ejercicioPracticoRepository: EjercicioPracticoRepository,
   ) { }
-
+  @authenticate('patient', 'admin', 'therapist')
   @get('/modulo-psicoeducativos/{id}/ejercicio-practicos', {
     responses: {
       '200': {
@@ -106,5 +109,18 @@ export class ModuloPsicoeducativoEjercicioPracticoController {
     @param.query.object('where', getWhereSchemaFor(EjercicioPractico)) where?: Where<EjercicioPractico>,
   ): Promise<Count> {
     return this.moduloPsicoeducativoRepository.ejercicioPracticos(id).delete(where);
+  }
+
+  @del('/ejercicios-practicos/{id}', {
+    responses: {
+      '204': {
+        description: 'EjercicioPractico DELETE success',
+      },
+    },
+  })
+  async deleteById(
+    @param.path.number('id') id: number,
+  ): Promise<void> {
+    await this.ejercicioPracticoRepository.deleteById(id);
   }
 }
