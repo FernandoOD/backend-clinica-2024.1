@@ -1,3 +1,4 @@
+import {authenticate} from '@loopback/authentication';
 import {inject} from '@loopback/core';
 import {
   HttpErrors,
@@ -51,6 +52,41 @@ export class CargaArchivosController {
     return res;
   }
 
+  @authenticate('test')
+  @post('/uploadPDF', {
+    responses: {
+      200: {
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+            },
+          },
+        },
+        description: 'PDF Resultados Test',
+      },
+    },
+  })
+
+
+  async pdfUpload(
+    @inject(RestBindings.Http.RESPONSE) response: Response,
+    @requestBody.file() request: Request,
+  ): Promise<object | false> {
+    const date = new Date().toLocaleDateString();
+    const pdfTestPath = path.join(__dirname, key.carpetaPdfTest);
+    let res = await this.StoreFileToPath(pdfTestPath, key.fieldImagePatient, request, response, key.fileExtensions);
+    if (res) {
+      const filename = response.req?.file?.filename;
+      if (filename) {
+        return {archivo: filename};
+      }
+    }
+    return res;
+  }
+
+
+
   /**
    * Return a config for multer storage
    * @param path
@@ -62,7 +98,7 @@ export class CargaArchivosController {
         cb(null, path)
       },
       filename: function (req: any, file: any, cb: any) {
-        filename = `${Date.now()}-${file.originalname}`
+        filename = `${new Date().toLocaleDateString().replace(/\//g, '-')}-${file.originalname}`
         cb(null, filename);
       }
     });

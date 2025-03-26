@@ -27,7 +27,7 @@ export class PacienteConsultaController {
   constructor(
     @repository(PacienteRepository) protected pacienteRepository: PacienteRepository,
   ) { }
-  @authenticate('patient')
+  @authenticate('patient', 'therapist')
   @get('/pacientes/{id}/consultas', {
     responses: {
       '200': {

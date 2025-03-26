@@ -44,3 +44,9 @@ export * from './test-psicometrico.controller';
 export * from './usuario-rol.controller';
 export * from './usuario.controller';
 
+export * from './respuesta-relevante.controller';
+export * from './resultado-test-respuesta-relevante.controller';
+export * from './respuesta-relevante-resultado-test.controller';
+export * from './paciente-modulo-psicoeducativo.controller';
+export * from './modulo-psicoeducativo-paciente.controller';
+export * from './paciente-modulo.controller';

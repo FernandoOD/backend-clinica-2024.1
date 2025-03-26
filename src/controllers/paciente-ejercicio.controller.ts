@@ -92,6 +92,7 @@ export class PacienteEjercicioController {
     return this.pacienteEjercicioPracticoRepository.find(filter);
   }
 
+
   @patch('/paciente-ejercicios-practicos')
   @response(200, {
     description: 'PacienteEjercicioPractico PATCH success count',
@@ -111,7 +112,7 @@ export class PacienteEjercicioController {
     return this.pacienteEjercicioPracticoRepository.updateAll(pacienteEjercicioPractico, where);
   }
 
-  @authenticate('patient')
+  @authenticate('patient', 'therapist')
   @get('/paciente-ejercicios-practicos/{id}')
   @response(200, {
     description: 'PacienteEjercicioPractico model instance',
@@ -129,6 +130,7 @@ export class PacienteEjercicioController {
     });
   }
 
+  @authenticate('patient')
   @patch('/paciente-ejercicios-practicos/{id}')
   @response(204, {
     description: 'PacienteEjercicioPractico PATCH success',

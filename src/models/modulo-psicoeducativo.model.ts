@@ -1,5 +1,7 @@
 import {Entity, hasMany, model, property} from '@loopback/repository';
 import {EjercicioPractico} from './ejercicio-practico.model';
+import {Paciente} from './paciente.model';
+import {PacienteModuloPsicoeducativo} from './paciente-modulo-psicoeducativo.model';
 
 @model({
   settings: {
@@ -44,6 +46,9 @@ export class ModuloPsicoeducativo extends Entity {
 
   @hasMany(() => EjercicioPractico)
   ejercicioPracticos: EjercicioPractico[];
+
+  @hasMany(() => Paciente, {through: {model: () => PacienteModuloPsicoeducativo}})
+  modeloPsicoeducativoPacientes: Paciente[];
 
   constructor(data?: Partial<ModuloPsicoeducativo>) {
     super(data);

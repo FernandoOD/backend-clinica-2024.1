@@ -1,7 +1,7 @@
 import {Getter, inject} from '@loopback/core';
 import {DefaultCrudRepository, HasManyRepositoryFactory, HasManyThroughRepositoryFactory, HasOneRepositoryFactory, repository} from '@loopback/repository';
 import {MysqldsDataSource} from '../datasources';
-import {Consulta, EvaluacionProgreso, HistoriaClinica, Mensaje, Paciente, PacienteRelations, PacienteTerapeuta, Terapeuta, EjercicioPractico, PacienteEjercicioPractico} from '../models';
+import {Consulta, EvaluacionProgreso, HistoriaClinica, Mensaje, Paciente, PacienteRelations, PacienteTerapeuta, Terapeuta, EjercicioPractico, PacienteEjercicioPractico, ModuloPsicoeducativo, PacienteModuloPsicoeducativo} from '../models';
 import {ConsultaRepository} from './consulta.repository';
 import {EvaluacionProgresoRepository} from './evaluacion-progreso.repository';
 import {HistoriaClinicaRepository} from './historia-clinica.repository';
@@ -10,6 +10,8 @@ import {PacienteTerapeutaRepository} from './paciente-terapeuta.repository';
 import {TerapeutaRepository} from './terapeuta.repository';
 import {PacienteEjercicioPracticoRepository} from './paciente-ejercicio-practico.repository';
 import {EjercicioPracticoRepository} from './ejercicio-practico.repository';
+import {PacienteModuloPsicoeducativoRepository} from './paciente-modulo-psicoeducativo.repository';
+import {ModuloPsicoeducativoRepository} from './modulo-psicoeducativo.repository';
 
 export class PacienteRepository extends DefaultCrudRepository<
   Paciente,
@@ -35,10 +37,17 @@ export class PacienteRepository extends DefaultCrudRepository<
           typeof Paciente.prototype.id
         >;
 
+  public readonly pacienteModelosPsicoeducativos: HasManyThroughRepositoryFactory<ModuloPsicoeducativo, typeof ModuloPsicoeducativo.prototype.id,
+          PacienteModuloPsicoeducativo,
+          typeof Paciente.prototype.id
+        >;
+
   constructor(
-    @inject('datasources.mysqlds') dataSource: MysqldsDataSource, @repository.getter('EvaluacionProgresoRepository') protected evaluacionProgresoRepositoryGetter: Getter<EvaluacionProgresoRepository>, @repository.getter('MensajeRepository') protected mensajeRepositoryGetter: Getter<MensajeRepository>, @repository.getter('ConsultaRepository') protected consultaRepositoryGetter: Getter<ConsultaRepository>, @repository.getter('HistoriaClinicaRepository') protected historiaClinicaRepositoryGetter: Getter<HistoriaClinicaRepository>, @repository.getter('PacienteTerapeutaRepository') protected pacienteTerapeutaRepositoryGetter: Getter<PacienteTerapeutaRepository>, @repository.getter('TerapeutaRepository') protected terapeutaRepositoryGetter: Getter<TerapeutaRepository>, @repository.getter('PacienteEjercicioPracticoRepository') protected pacienteEjercicioPracticoRepositoryGetter: Getter<PacienteEjercicioPracticoRepository>, @repository.getter('EjercicioPracticoRepository') protected ejercicioPracticoRepositoryGetter: Getter<EjercicioPracticoRepository>,
+    @inject('datasources.mysqlds') dataSource: MysqldsDataSource, @repository.getter('EvaluacionProgresoRepository') protected evaluacionProgresoRepositoryGetter: Getter<EvaluacionProgresoRepository>, @repository.getter('MensajeRepository') protected mensajeRepositoryGetter: Getter<MensajeRepository>, @repository.getter('ConsultaRepository') protected consultaRepositoryGetter: Getter<ConsultaRepository>, @repository.getter('HistoriaClinicaRepository') protected historiaClinicaRepositoryGetter: Getter<HistoriaClinicaRepository>, @repository.getter('PacienteTerapeutaRepository') protected pacienteTerapeutaRepositoryGetter: Getter<PacienteTerapeutaRepository>, @repository.getter('TerapeutaRepository') protected terapeutaRepositoryGetter: Getter<TerapeutaRepository>, @repository.getter('PacienteEjercicioPracticoRepository') protected pacienteEjercicioPracticoRepositoryGetter: Getter<PacienteEjercicioPracticoRepository>, @repository.getter('EjercicioPracticoRepository') protected ejercicioPracticoRepositoryGetter: Getter<EjercicioPracticoRepository>, @repository.getter('PacienteModuloPsicoeducativoRepository') protected pacienteModuloPsicoeducativoRepositoryGetter: Getter<PacienteModuloPsicoeducativoRepository>, @repository.getter('ModuloPsicoeducativoRepository') protected moduloPsicoeducativoRepositoryGetter: Getter<ModuloPsicoeducativoRepository>,
   ) {
     super(Paciente, dataSource);
+    this.pacienteModelosPsicoeducativos = this.createHasManyThroughRepositoryFactoryFor('pacienteModelosPsicoeducativos', moduloPsicoeducativoRepositoryGetter, pacienteModuloPsicoeducativoRepositoryGetter,);
+    this.registerInclusionResolver('pacienteModelosPsicoeducativos', this.pacienteModelosPsicoeducativos.inclusionResolver);
     this.ejercicioPracticos = this.createHasManyThroughRepositoryFactoryFor('ejercicioPracticos', ejercicioPracticoRepositoryGetter, pacienteEjercicioPracticoRepositoryGetter,);
     this.registerInclusionResolver('ejercicioPracticos', this.ejercicioPracticos.inclusionResolver);
     this.terapeutas = this.createHasManyThroughRepositoryFactoryFor('terapeutas', terapeutaRepositoryGetter, pacienteTerapeutaRepositoryGetter,);

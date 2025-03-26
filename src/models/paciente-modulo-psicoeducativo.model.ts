@@ -1,7 +1,7 @@
 import {Entity, model, property} from '@loopback/repository';
 
 @model()
-export class PacienteEjercicioPractico extends Entity {
+export class PacienteModuloPsicoeducativo extends Entity {
   @property({
     type: 'number',
     id: true,
@@ -17,7 +17,7 @@ export class PacienteEjercicioPractico extends Entity {
   @property({
     type: 'number',
   })
-  ejercicioPracticoId?: number;
+  moduloPsicoeducativoId?: number;
 
   @property({
     type: 'boolean',
@@ -25,13 +25,13 @@ export class PacienteEjercicioPractico extends Entity {
   })
   contestado: boolean;
 
-  constructor(data?: Partial<PacienteEjercicioPractico>) {
+  constructor(data?: Partial<PacienteModuloPsicoeducativo>) {
     super(data);
   }
 }
 
-export interface PacienteEjercicioPracticoRelations {
+export interface PacienteModuloPsicoeducativoRelations {
   // describe navigational properties here
 }
 
-export type PacienteEjercicioPracticoWithRelations = PacienteEjercicioPractico & PacienteEjercicioPracticoRelations;
+export type PacienteModuloPsicoeducativoWithRelations = PacienteModuloPsicoeducativo & PacienteModuloPsicoeducativoRelations;

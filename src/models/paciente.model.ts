@@ -7,6 +7,8 @@ import {PacienteTerapeuta} from './paciente-terapeuta.model';
 import {Terapeuta} from './terapeuta.model';
 import {EjercicioPractico} from './ejercicio-practico.model';
 import {PacienteEjercicioPractico} from './paciente-ejercicio-practico.model';
+import {ModuloPsicoeducativo} from './modulo-psicoeducativo.model';
+import {PacienteModuloPsicoeducativo} from './paciente-modulo-psicoeducativo.model';
 
 @model()
 export class Paciente extends Entity {
@@ -86,6 +88,9 @@ export class Paciente extends Entity {
 
   @hasMany(() => EjercicioPractico, {through: {model: () => PacienteEjercicioPractico}})
   ejercicioPracticos: EjercicioPractico[];
+
+  @hasMany(() => ModuloPsicoeducativo, {through: {model: () => PacienteModuloPsicoeducativo}})
+  pacienteModelosPsicoeducativos: ModuloPsicoeducativo[];
 
   constructor(data?: Partial<Paciente>) {
     super(data);

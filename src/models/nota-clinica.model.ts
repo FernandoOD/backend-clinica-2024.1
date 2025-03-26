@@ -1,5 +1,5 @@
 import {belongsTo, Entity, model, property} from '@loopback/repository';
-import {Consulta} from './consulta.model';
+import {Paciente} from './paciente.model';
 
 @model({
   settings: {
@@ -53,8 +53,8 @@ export class NotaClinica extends Entity {
   })
   Conceptualizacion: string;
 
-  @belongsTo(() => Consulta, {name: 'consultaNota'})
-  consultaId: number;
+  @belongsTo(() => Paciente, {name: 'pacienteNota'})
+  pacienteId: number;
 
   constructor(data?: Partial<NotaClinica>) {
     super(data);

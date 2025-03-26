@@ -26,7 +26,7 @@ import {
 import {ConsultaRepository, TestPsicometricoRepository} from '../repositories';
 import {GeneralFunctionsService, JwtService} from '../services';
 
-@authenticate('patient')
+@authenticate('patient', 'therapist')
 export class ConsultaResultadoTestController {
   constructor(
     @repository(ConsultaRepository) protected consultaRepository: ConsultaRepository,

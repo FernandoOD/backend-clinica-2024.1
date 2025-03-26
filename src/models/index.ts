@@ -17,3 +17,5 @@ export * from './usuario.model';
 export * from './credenciales.model';
 export * from './paciente-ejercicio-practico.model';
 export * from './test-select.model';
+export * from './respuesta-relevante.model';
+export * from './paciente-modulo-psicoeducativo.model';
