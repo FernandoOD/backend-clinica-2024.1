@@ -1,7 +1,6 @@
-import {belongsTo, Entity, hasMany, hasOne, model, property} from '@loopback/repository';
+import {belongsTo, Entity, hasMany, model, property} from '@loopback/repository';
 import {ConsultaTest} from './consulta-test.model';
 import {EntradaHistoria} from './entrada-historia.model';
-import {NotaClinica} from './nota-clinica.model';
 import {Paciente} from './paciente.model';
 import {ResultadoTest} from './resultado-test.model';
 import {Terapeuta} from './terapeuta.model';
@@ -57,9 +56,6 @@ export class Consulta extends Entity {
 
   @hasMany(() => EntradaHistoria)
   entradaHistorias: EntradaHistoria[];
-
-  @hasOne(() => NotaClinica)
-  notaClinica: NotaClinica;
 
   @hasMany(() => TestPsicometrico, {through: {model: () => ConsultaTest}})
   testPsicometricos: TestPsicometrico[];

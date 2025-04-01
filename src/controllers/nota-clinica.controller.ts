@@ -19,11 +19,12 @@ import {
   response,
 } from '@loopback/rest';
 import {NotaClinica} from '../models';
-import {NotaClinicaRepository} from '../repositories';
+import {NotaClinicaRepository, PacienteRepository} from '../repositories';
 
 @authenticate('admin', 'therapist')
 export class NotaClinicaController {
   constructor(
+    @repository(PacienteRepository) protected pacienteRepository: PacienteRepository,
     @repository(NotaClinicaRepository)
     public notaClinicaRepository: NotaClinicaRepository,
   ) { }
@@ -60,22 +61,23 @@ export class NotaClinicaController {
     return this.notaClinicaRepository.count(where);
   }
 
-  @get('/notas-clinicas')
-  @response(200, {
-    description: 'Array of NotaClinica model instances',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'array',
-          items: getModelSchemaRef(NotaClinica, {includeRelations: true}),
+  @get('/pacientes/{id}/notas-clinicas', {
+    responses: {
+      '200': {
+        description: 'Array of Paciente has many Consulta',
+        content: {
+          'application/json': {
+            schema: {type: 'array', items: getModelSchemaRef(NotaClinica)},
+          },
         },
       },
     },
   })
   async find(
-    @param.filter(NotaClinica) filter?: Filter<NotaClinica>,
+    @param.path.number('id') id: number,
+    @param.query.object('filter') filter?: Filter<NotaClinica>,
   ): Promise<NotaClinica[]> {
-    return this.notaClinicaRepository.find(filter);
+    return this.pacienteRepository.notasClinicas(id).find(filter);
   }
 
   @patch('/notas-clinicas')

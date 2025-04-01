@@ -1,8 +1,8 @@
-import {inject, Getter} from '@loopback/core';
-import {DefaultCrudRepository, repository, BelongsToAccessor} from '@loopback/repository';
+import {Getter, inject} from '@loopback/core';
+import {BelongsToAccessor, DefaultCrudRepository, repository} from '@loopback/repository';
 import {MysqldsDataSource} from '../datasources';
-import {NotaClinica, NotaClinicaRelations, Consulta} from '../models';
-import {ConsultaRepository} from './consulta.repository';
+import {NotaClinica, NotaClinicaRelations, Paciente} from '../models';
+import {PacienteRepository} from './paciente.repository';
 
 export class NotaClinicaRepository extends DefaultCrudRepository<
   NotaClinica,
@@ -10,13 +10,13 @@ export class NotaClinicaRepository extends DefaultCrudRepository<
   NotaClinicaRelations
 > {
 
-  public readonly consultaNota: BelongsToAccessor<Consulta, typeof NotaClinica.prototype.id>;
+  public readonly pacienteNota: BelongsToAccessor<Paciente, typeof NotaClinica.prototype.id>;
 
   constructor(
-    @inject('datasources.mysqlds') dataSource: MysqldsDataSource, @repository.getter('ConsultaRepository') protected consultaRepositoryGetter: Getter<ConsultaRepository>,
+    @inject('datasources.mysqlds') dataSource: MysqldsDataSource, @repository.getter('PacienteRepository') protected pacienteRepositoryGetter: Getter<PacienteRepository>,
   ) {
     super(NotaClinica, dataSource);
-    this.consultaNota = this.createBelongsToAccessorFor('consultaNota', consultaRepositoryGetter,);
-    this.registerInclusionResolver('consultaNota', this.consultaNota.inclusionResolver);
+    this.pacienteNota = this.createBelongsToAccessorFor('pacienteNota', pacienteRepositoryGetter,);
+    this.registerInclusionResolver('pacienteNota', this.pacienteNota.inclusionResolver);
   }
 }

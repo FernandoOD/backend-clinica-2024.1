@@ -1,6 +1,5 @@
 export * from './carga-archivos.controller';
 export * from './consulta-entrada-historia.controller';
-export * from './consulta-nota-clinica.controller';
 export * from './consulta-paciente.controller';
 export * from './consulta-resultado-test.controller';
 export * from './consulta-terapeuta.controller';
@@ -19,7 +18,6 @@ export * from './mensaje-paciente.controller';
 export * from './mensaje-terapeuta.controller';
 export * from './modulo-psicoeducativo-ejercicio-practico.controller';
 export * from './modulos-psicoeducativos.controller';
-export * from './nota-clinica-consulta.controller';
 export * from './nota-clinica.controller';
 export * from './paciente-consulta.controller';
 export * from './paciente-ejercicio-practico.controller';
@@ -44,9 +42,10 @@ export * from './test-psicometrico.controller';
 export * from './usuario-rol.controller';
 export * from './usuario.controller';
 
+export * from './modulo-psicoeducativo-paciente.controller';
+export * from './paciente-modulo-psicoeducativo.controller';
+export * from './paciente-modulo.controller';
+export * from './respuesta-relevante-resultado-test.controller';
 export * from './respuesta-relevante.controller';
 export * from './resultado-test-respuesta-relevante.controller';
-export * from './respuesta-relevante-resultado-test.controller';
-export * from './paciente-modulo-psicoeducativo.controller';
-export * from './modulo-psicoeducativo-paciente.controller';
-export * from './paciente-modulo.controller';
+

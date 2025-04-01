@@ -5,10 +5,10 @@ import {Paciente} from './paciente.model';
   settings: {
     foreignKeys: {
       fk_consulta_id_nota: {
-        name: 'fk_consulta_id_nota',
-        entity: 'Consulta',
+        name: 'fk_paciente_id_nota',
+        entity: 'Paciente',
         entityKey: 'id',
-        foreignKey: 'consultaId',
+        foreignKey: 'pacienteId',
       },
     },
   },

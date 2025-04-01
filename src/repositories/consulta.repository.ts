@@ -1,10 +1,9 @@
 import {Getter, inject} from '@loopback/core';
-import {BelongsToAccessor, DefaultCrudRepository, HasManyRepositoryFactory, HasManyThroughRepositoryFactory, HasOneRepositoryFactory, repository} from '@loopback/repository';
+import {BelongsToAccessor, DefaultCrudRepository, HasManyRepositoryFactory, HasManyThroughRepositoryFactory, repository} from '@loopback/repository';
 import {MysqldsDataSource} from '../datasources';
-import {Consulta, ConsultaRelations, ConsultaTest, EntradaHistoria, NotaClinica, Paciente, ResultadoTest, Terapeuta, TestPsicometrico} from '../models';
+import {Consulta, ConsultaRelations, ConsultaTest, EntradaHistoria, Paciente, ResultadoTest, Terapeuta, TestPsicometrico} from '../models';
 import {ConsultaTestRepository} from './consulta-test.repository';
 import {EntradaHistoriaRepository} from './entrada-historia.repository';
-import {NotaClinicaRepository} from './nota-clinica.repository';
 import {PacienteRepository} from './paciente.repository';
 import {ResultadoTestRepository} from './resultado-test.repository';
 import {TerapeutaRepository} from './terapeuta.repository';
@@ -24,7 +23,6 @@ export class ConsultaRepository extends DefaultCrudRepository<
 
   public readonly entradaHistorias: HasManyRepositoryFactory<EntradaHistoria, typeof Consulta.prototype.id>;
 
-  public readonly notaClinica: HasOneRepositoryFactory<NotaClinica, typeof Consulta.prototype.id>;
 
   public readonly testPsicometricos: HasManyThroughRepositoryFactory<TestPsicometrico, typeof TestPsicometrico.prototype.id,
     ConsultaTest,
@@ -32,13 +30,11 @@ export class ConsultaRepository extends DefaultCrudRepository<
   >;
 
   constructor(
-    @inject('datasources.mysqlds') dataSource: MysqldsDataSource, @repository.getter('TerapeutaRepository') protected terapeutaRepositoryGetter: Getter<TerapeutaRepository>, @repository.getter('PacienteRepository') protected pacienteRepositoryGetter: Getter<PacienteRepository>, @repository.getter('ResultadoTestRepository') protected resultadoTestRepositoryGetter: Getter<ResultadoTestRepository>, @repository.getter('EntradaHistoriaRepository') protected entradaHistoriaRepositoryGetter: Getter<EntradaHistoriaRepository>, @repository.getter('NotaClinicaRepository') protected notaClinicaRepositoryGetter: Getter<NotaClinicaRepository>, @repository.getter('ConsultaTestRepository') protected consultaTestRepositoryGetter: Getter<ConsultaTestRepository>, @repository.getter('TestPsicometricoRepository') protected testPsicometricoRepositoryGetter: Getter<TestPsicometricoRepository>,
+    @inject('datasources.mysqlds') dataSource: MysqldsDataSource, @repository.getter('TerapeutaRepository') protected terapeutaRepositoryGetter: Getter<TerapeutaRepository>, @repository.getter('PacienteRepository') protected pacienteRepositoryGetter: Getter<PacienteRepository>, @repository.getter('ResultadoTestRepository') protected resultadoTestRepositoryGetter: Getter<ResultadoTestRepository>, @repository.getter('EntradaHistoriaRepository') protected entradaHistoriaRepositoryGetter: Getter<EntradaHistoriaRepository>, @repository.getter('ConsultaTestRepository') protected consultaTestRepositoryGetter: Getter<ConsultaTestRepository>, @repository.getter('TestPsicometricoRepository') protected testPsicometricoRepositoryGetter: Getter<TestPsicometricoRepository>,
   ) {
     super(Consulta, dataSource);
     this.testPsicometricos = this.createHasManyThroughRepositoryFactoryFor('testPsicometricos', testPsicometricoRepositoryGetter, consultaTestRepositoryGetter,);
     this.registerInclusionResolver('testPsicometricos', this.testPsicometricos.inclusionResolver);
-    this.notaClinica = this.createHasOneRepositoryFactoryFor('notaClinica', notaClinicaRepositoryGetter);
-    this.registerInclusionResolver('notaClinica', this.notaClinica.inclusionResolver);
     this.entradaHistorias = this.createHasManyRepositoryFactoryFor('entradaHistorias', entradaHistoriaRepositoryGetter,);
     this.registerInclusionResolver('entradaHistorias', this.entradaHistorias.inclusionResolver);
     this.resultadosTests = this.createHasManyRepositoryFactoryFor('resultadosTests', resultadoTestRepositoryGetter,);
