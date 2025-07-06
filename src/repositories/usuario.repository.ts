@@ -1,7 +1,7 @@
-import {inject, Getter} from '@loopback/core';
-import {DefaultCrudRepository, repository, BelongsToAccessor} from '@loopback/repository';
+import {Getter, inject} from '@loopback/core';
+import {BelongsToAccessor, DefaultCrudRepository, repository} from '@loopback/repository';
 import {MongodbdsDataSource} from '../datasources';
-import {Usuario, UsuarioRelations, Rol} from '../models';
+import {Rol, Usuario, UsuarioRelations} from '../models';
 import {RolRepository} from './rol.repository';
 
 export class UsuarioRepository extends DefaultCrudRepository<
@@ -16,6 +16,7 @@ export class UsuarioRepository extends DefaultCrudRepository<
     @inject('datasources.mongodbds') dataSource: MongodbdsDataSource, @repository.getter('RolRepository') protected rolRepositoryGetter: Getter<RolRepository>,
   ) {
     super(Usuario, dataSource);
+
     this.rol = this.createBelongsToAccessorFor('rol', rolRepositoryGetter,);
     this.registerInclusionResolver('rol', this.rol.inclusionResolver);
   }

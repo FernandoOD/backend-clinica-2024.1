@@ -1,4 +1,4 @@
-import {ApplicationConfig, App} from './application';
+import {App, ApplicationConfig} from './application';
 
 export * from './application';
 
@@ -18,8 +18,8 @@ if (require.main === module) {
   // Run the application
   const config = {
     rest: {
-      port: +(process.env.PORT ?? 3000),
-      host: process.env.HOST !== undefined ? process.env.HOST : '127.0.0.1',
+      port: +(process.env.PORT ?? 8080),
+      host: process.env.HOST !== undefined ? process.env.HOST : '0.0.0.0',
       // The `gracePeriodForClose` provides a graceful close for http/https
       // servers with keep-alive clients. The default value is `Infinity`
       // (don't force-close). If you want to immediately destroy all sockets

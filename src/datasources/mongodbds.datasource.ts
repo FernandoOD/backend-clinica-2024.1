@@ -4,13 +4,18 @@ import {juggler} from '@loopback/repository';
 const config = {
   name: 'mongodbds',
   connector: 'mongodb',
-  url: '',
-  host: 'localhost',
-  port: 27017,
-  user: '',
-  password: '',
+  url: 'mongodb+srv://ferchuy2001:Ar8uFWSUhXX8Xuuc@clinicadb.kxjvcrj.mongodb.net/ClinicaSegDB?retryWrites=true&w=majority',
   database: 'ClinicaSegDB',
-  useNewUrlParser: true
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  tls: true,
+  tlsAllowInvalidCertificates: true,
+  debug: true,
+  connectTimeoutMS: 30000,  // Aumenta el tiempo de espera de conexión a 30 segundos
+  socketTimeoutMS: 45000,   // Aumenta el tiempo de espera de socket
+  serverSelectionTimeoutMS: 30000, // Espera 30 segundos antes de fallar
+  retryWrites: true,
+  maxPoolSize: 10,  // 10 segundos
 };
 
 // Observe application's life cycle to disconnect the datasource when

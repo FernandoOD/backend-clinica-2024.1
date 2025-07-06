@@ -14,26 +14,26 @@ export class JwtService {
   CrearTokenJWT(usuario: Usuario) {
     let secretKey = key.jwtKey;
     let tk = jwt.sign({
-      exp: key.expTimeJWT,
       data: {
         id: usuario.id,
         email: usuario.Email,
         role: usuario.rolId
       }
-    }, secretKey);
+    }, secretKey,
+      {expiresIn: key.expTimeJWT});
     return tk;
   }
 
   CrearTokenTest(id: number, nombre: String, consultaId: number) {
     let secretKey = key.jwtKey;
     let tk = jwt.sign({
-      exp: key.expTimeJWT,
       data: {
         id: id,
         nombre: nombre,
         consultaId: consultaId
       }
-    }, secretKey);
+    }, secretKey,
+      {expiresIn: key.expTimeJWT});
     return tk;
   }
 
@@ -45,21 +45,21 @@ export class JwtService {
     try {
       let decode = jwt.verify(token, key.jwtKey);
       return decode;
-    } catch {
+    } catch (error) {
       return null;
     }
   }
 
   RoleString(token: string) {
     let info = this.VerificarTokenJWT(token);
-    if (info.data.role == '66d252437142ea3216140930') {
+    if (info.data.role == '67eda5d00b73c998eff4819a') {
       return 'admin';
-    } else if (info.data.role == '66d2530b7142ea3216140931') {
+    } else if (info.data.role == '67eda60a0b73c998eff4819c') {
       return 'paciente';
-    } else if (info.data.role == '66d2532a7142ea3216140932') {
+    } else if (info.data.role == '67eda5f70b73c998eff4819b') {
       return 'terapeuta';
     } else {
-      throw new HttpErrors[401]("El token es valido, pero no tiene los permisos suficientes")
+      throw new HttpErrors[401]("El token es valido, pero no tiene los permisos suficientes,RoleString")
     }
   }
 }

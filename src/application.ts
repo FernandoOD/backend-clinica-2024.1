@@ -51,5 +51,7 @@ export class App extends BootMixin(
     registerAuthenticationStrategy(this, TherapistStrategy);
     registerAuthenticationStrategy(this, TestStrategy);
     this.component(AuthenticationComponent);
+
+    console.log("🔥 Backend reiniciado - versión nueva");
   }
 }

@@ -1,7 +1,7 @@
 export namespace Keys {
     export const AESKey = 'Im4g1ne@ns';
     export const jwtKey = '5hhCl4v3@JWT';
-    export const expTimeJWT = (Date.now() / 1000) + (60 * 60 * 10);
+    export const expTimeJWT = '1h';
     export const carpetaImagenPaciente = "../../archivos/pacientes";
     export const carpetaPdfTest = "../../archivos/PDFTests";
     export const fieldImagePatient = "file";

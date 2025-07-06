@@ -1,0 +1,33 @@
+# Node modules locales
+node_modules
+
+# Archivos de salida
+dist
+build
+
+# Archivos de lock temporales y logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de entorno (¡usa secrets seguros en lugar de esto!)
+.env
+.env.*
+
+# Configs locales de IDE
+.vscode
+.idea
+
+# Docker
+docker-compose*
+Dockerfile*
+
+# Otros archivos temporales
+*.swp
+*.swo
+*.tmp

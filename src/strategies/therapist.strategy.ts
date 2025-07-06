@@ -28,7 +28,7 @@ export class TherapistStrategy implements AuthenticationStrategy {
     }
     let info = this.servicioJWT.VerificarTokenJWT(token);
     if (info) {
-      if (info.data.role == '66d2532a7142ea3216140932') {
+      if (info.data.role == '67eda5f70b73c998eff4819b') {
         let perfil: UserProfile = Object.assign({
           email: info.data.email,
           password: info.data.password,
@@ -36,7 +36,7 @@ export class TherapistStrategy implements AuthenticationStrategy {
         });
         return perfil;
       } else {
-        throw new HttpErrors[401]("El token en valido, pero no tiene los permisos suficientes")
+        throw new HttpErrors[401]("El token en valido, pero no tiene los permisos suficientes,Terapeuta")
       }
     }
     else {

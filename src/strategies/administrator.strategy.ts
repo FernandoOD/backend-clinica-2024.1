@@ -27,8 +27,9 @@ export class AdministratorStrategy implements AuthenticationStrategy {
       throw new HttpErrors[401]("No existe un token en la solicitud")
     }
     let info = this.servicioJWT.VerificarTokenJWT(token);
+    console.log("token", token);
     if (info) {
-      if (info.data.role == '66d252437142ea3216140930') {
+      if (info.data.role == '67eda5d00b73c998eff4819a') {
         let perfil: UserProfile = Object.assign({
           email: info.data.email,
           password: info.data.password,
@@ -36,11 +37,11 @@ export class AdministratorStrategy implements AuthenticationStrategy {
         });
         return perfil;
       } else {
-        throw new HttpErrors[401]("El token es valido, pero no tiene los permisos suficientes")
+        throw new HttpErrors[401]("El token es valido, pero no tiene los permisos suficientes,Administrador")
       }
     }
     else {
-      throw new HttpErrors[401]("El token enviado no es valido")
+      throw new HttpErrors[401]("El token enviado no es valido,Administrador")
     }
   }
 }

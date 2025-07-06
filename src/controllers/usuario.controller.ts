@@ -24,7 +24,7 @@ import {Credenciales, Usuario} from '../models';
 import {UsuarioRepository} from '../repositories';
 import {GeneralFunctionsService, JwtService} from '../services';
 
-@authenticate('admin')
+
 export class UsuarioController {
   constructor(
     @repository(UsuarioRepository)
@@ -34,7 +34,7 @@ export class UsuarioController {
     @service(JwtService)
     public serviceJWT: JwtService
   ) { }
-
+  @authenticate('admin')
   @post('/usuarios')
   @response(200, {
     description: 'Usuario model instance',
@@ -66,10 +66,11 @@ export class UsuarioController {
     /*
      * Noytificar al usuario
     */
-
+    usuarioAgregado.Password = pass;
     return usuarioAgregado;
   }
 
+  @authenticate('admin')
   @get('/usuarios/count')
   @response(200, {
     description: 'Usuario model count',
@@ -81,6 +82,7 @@ export class UsuarioController {
     return this.usuarioRepository.count(where);
   }
 
+  @authenticate('admin')
   @get('/usuarios')
   @response(200, {
     description: 'Array of Usuario model instances',
@@ -99,6 +101,7 @@ export class UsuarioController {
     return this.usuarioRepository.find(filter);
   }
 
+  @authenticate('admin')
   @patch('/usuarios')
   @response(200, {
     description: 'Usuario PATCH success count',
@@ -118,6 +121,7 @@ export class UsuarioController {
     return this.usuarioRepository.updateAll(usuario, where);
   }
 
+  @authenticate('admin')
   @get('/usuarios/{id}')
   @response(200, {
     description: 'Usuario model instance',
@@ -134,6 +138,7 @@ export class UsuarioController {
     return this.usuarioRepository.findById(id, filter);
   }
 
+  @authenticate('admin')
   @patch('/usuarios/{id}')
   @response(204, {
     description: 'Usuario PATCH success',
@@ -152,6 +157,7 @@ export class UsuarioController {
     await this.usuarioRepository.updateById(id, usuario);
   }
 
+  @authenticate('admin')
   @put('/usuarios/{id}')
   @response(204, {
     description: 'Usuario PUT success',
@@ -163,6 +169,7 @@ export class UsuarioController {
     await this.usuarioRepository.replaceById(id, usuario);
   }
 
+  @authenticate('admin')
   @del('/usuarios/{idPersona}')
   @response(204, {
     description: 'Usuario DELETE success',
