@@ -29,7 +29,7 @@ export class AdministratorStrategy implements AuthenticationStrategy {
     let info = this.servicioJWT.VerificarTokenJWT(token);
     console.log("token", token);
     if (info) {
-      if (info.data.role == '67eda5d00b73c998eff4819a') {
+      if (info.data.role == 'id del rol de administrador') {
         let perfil: UserProfile = Object.assign({
           email: info.data.email,
           password: info.data.password,

@@ -4,7 +4,7 @@ import {juggler} from '@loopback/repository';
 const config = {
   name: 'mongodbds',
   connector: 'mongodb',
-  url: 'mongodb+srv://ferchuy2001:Ar8uFWSUhXX8Xuuc@clinicadb.kxjvcrj.mongodb.net/ClinicaSegDB?retryWrites=true&w=majority',
+  url: '',
   database: 'ClinicaSegDB',
   useNewUrlParser: true,
   useUnifiedTopology: true,
